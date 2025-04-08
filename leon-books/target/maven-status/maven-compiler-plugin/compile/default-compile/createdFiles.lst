@@ -1,0 +1,12 @@
+br\com\leonbooks\leon_books\repository\EmprestimoRepository.class
+br\com\leonbooks\leon_books\ui\ConsoleUI.class
+br\com\leonbooks\leon_books\model\Usuario.class
+br\com\leonbooks\leon_books\LeonBooksApplication.class
+br\com\leonbooks\leon_books\service\UsuarioService.class
+br\com\leonbooks\leon_books\service\LivroService.class
+br\com\leonbooks\leon_books\controller\LivroController.class
+br\com\leonbooks\leon_books\model\Livro.class
+br\com\leonbooks\leon_books\model\Emprestimo.class
+br\com\leonbooks\leon_books\service\EmprestimoService.class
+br\com\leonbooks\leon_books\repository\LivroRepository.class
+br\com\leonbooks\leon_books\repository\UsuarioRepository.class
