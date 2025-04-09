@@ -24,8 +24,38 @@ O protótipo da aplicação foi feita usando o software de design UI/UX <a href=
 * <a href="https://youtu.be/i39aN560JV0">Screencast do Wireframe</a>
 
 #
+## Entrega 2
+### Implementação de Histórias
+
+Foram desenvolvidas 2 (duas) histórias do KanBan para nossa aplicação, sendo elas 'Cadastrar novos livros' e 'Listar livros disponíveis'.
+
+![image](https://github.com/user-attachments/assets/5d142bf8-12b0-49dc-aa1a-1818967d307a)
+
+### Issue/BugTracker
+Disponibilizamos abaixo o estado atual das issues e bugs que foram resolvidas no projeto.
+
+![image](https://github.com/user-attachments/assets/793e8328-cb0a-4045-9373-0b3382c2906b)
+
+### Diagrama de Classes
+Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
+
+![Diagrama-de-classes](https://github.com/user-attachments/assets/32ad3ece-98cd-4cd1-a8ca-95b84848a511)
+
+### Screencast [2ª Entrega]
+Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 2ª entrega.
+
+* <a href="https://youtu.be/vXevEscIOeM">Screencast das Implementações [2ª Entrega]</a>
 
 ## Projeto de Programação Orientada a Objetos - 2025.1 - CESAR School
+
+<h3>Tecnologias Usadas</h3>
+
+* Back-End: Java com Spring Boot
+* Front-end: React.js
+* Banco de Dados: PostgreSQL 
+* Prototipagem: Figma
+* Integração e Deploy: Docker / Kubernetes (Em Análise)
+
 <h3>Integrantes da Equipe</h3>
 
 <ul>
