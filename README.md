@@ -50,7 +50,7 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 <h3>Tecnologias Usadas</h3>
 
-* Back-End: Java com Spring Boot
+* Back-End: Java 21 com Spring Boot
 * Front-end: React.js
 * Banco de Dados: PostgreSQL 
 * Prototipagem: Figma
