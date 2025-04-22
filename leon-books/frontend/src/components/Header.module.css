@@ -1,4 +1,36 @@
 .header {
-    background: #333;
-    height: 80px;
+    background: var(--white);
+    display: flex;
+    justify-content: left;
+    padding: 1.25rem 0 0 3rem; /* top right down left */
+    height: 65px;
+}
+
+.header p {
+    display: flex;
+    align-items: center;  
+    margin: 0;
+    padding: 0;
+    line-height: normal; 
+    font-size: 20px;
+}
+
+.header img {
+    height: 3rem;
+    width: 3rem;     
+    object-fit: contain;
+    margin-right: 0.5rem; 
+    margin-top: -13px;
+}
+
+.header p span {
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    margin-top: -20px;
+    margin-left: -4px;
+}
+
+.div {
+    box-shadow: 0 0 0 3px #E5E7EB ;
 }
