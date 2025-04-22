@@ -54,7 +54,7 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 * Front-end: React.js
 * Banco de Dados: PostgreSQL 
 * Prototipagem: Figma
-* Integração e Deploy: Docker / Kubernetes (Em Análise)
+* Integração e Deploy: Docker
 
 <h3>Integrantes da Equipe</h3>
 
