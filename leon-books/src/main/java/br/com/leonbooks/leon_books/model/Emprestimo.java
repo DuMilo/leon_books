@@ -5,16 +5,16 @@ import java.time.LocalDate;
 public class Emprestimo {
     private String id;
     private Livro livro;
-    private Usuario usuario;
+    private Cliente cliente;
     private LocalDate dataEmprestimo;
     private LocalDate dataDevolucao;
     private boolean devolvido;
     private boolean renovado;
 
-    public Emprestimo(String id, Livro livro, Usuario usuario) {
+    public Emprestimo(String id, Livro livro, Cliente cliente) {
         this.id = id;
         this.livro = livro;
-        this.usuario = usuario;
+        this.cliente = cliente;
         this.dataEmprestimo = LocalDate.now();
         this.dataDevolucao = LocalDate.now().plusDays(14);
         this.devolvido = false;
@@ -27,8 +27,8 @@ public class Emprestimo {
     public Livro getLivro(){
         return livro;
     }
-    public Usuario getUsuario(){
-        return usuario;
+    public Cliente getUsuario(){
+        return cliente;
     }
     public LocalDate getDataEmprestimo(){
         return dataEmprestimo;

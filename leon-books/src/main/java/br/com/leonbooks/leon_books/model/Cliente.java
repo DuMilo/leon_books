@@ -1,16 +1,14 @@
 package br.com.leonbooks.leon_books.model;
 
-public class Usuario {
+public class Cliente {
     private String id;
     private String nome;
     private String email;
-    private boolean funcionario;
 
-    public Usuario(String id, String nome, String email, boolean funcionario){
+    public Cliente(String id, String nome, String email){
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.funcionario = funcionario;
     }
 
     public String getId(){
@@ -21,8 +19,5 @@ public class Usuario {
     }
     public String getEmail(){
         return email;
-    }
-    public boolean isFuncionario(){
-        return funcionario;
     }
 }
