@@ -20,8 +20,8 @@
     width: 3rem;     
     object-fit: contain;
     margin-top: -13px;
-    margin-left: 96px;
     margin-right: 4px;
+    margin-left: -20px;
 }
 
 .header p span {
