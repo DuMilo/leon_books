@@ -1,4 +1,5 @@
 import { Header } from './components/Header';
+import { Sidebar } from './components/Sidebar';
 import './global.css';
 import styles from './App.module.css';
 
@@ -9,11 +10,12 @@ export function App() {
       <Header />
 
         <div className={styles.wrapper}>
-          <aside>
-            sidebar<br></br>
-            tres
-          </aside>
-          <main>aqui é o main</main>
+          <Sidebar />
+
+          <main>
+            aqui é o main
+          </main>
+          
         </div>
     </div>
   )

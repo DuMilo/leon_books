@@ -11,5 +11,5 @@ export function Header() {
             </p>
             </header>
         </div>
-    )
+    );
 }

@@ -1,15 +1,12 @@
 .wrapper {
-    max-width: 110rem;
-    margin: 4px;
-
+    min-width: 100vh;
+    margin: 4px; /* top right down left */
     display: grid;
     grid-template-columns: 256px 1fr;
-    gap: 2rem;
+    gap: 26px;
     align-items: flex-start;
 }
 
-.wrapper aside {
-    width: 220px;
-    min-height: 100vh;
-    background: var(--white);
+.wrapper main {
+    padding: 26px;
 }
