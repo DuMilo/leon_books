@@ -1,3 +1,3 @@
-## Leon Books - Front-End
+## React + Vite - Project
 
-### Integração em Andamento
+### --- In Progress ---

@@ -19,8 +19,9 @@
     height: 3rem;
     width: 3rem;     
     object-fit: contain;
-    margin-right: 0.5rem; 
     margin-top: -13px;
+    margin-left: 96px;
+    margin-right: 4px;
 }
 
 .header p span {
