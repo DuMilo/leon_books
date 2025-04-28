@@ -46,6 +46,10 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 * <a href="https://youtu.be/vXevEscIOeM">Screencast das Implementações [2ª Entrega]</a>
 
+## Entrega 3
+
+-- Em Andamento --
+
 ## Projeto de Programação Orientada a Objetos - 2025.1 - CESAR School
 
 <h3>Tecnologias Usadas</h3>
