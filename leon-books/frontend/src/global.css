@@ -1,6 +1,6 @@
 :root {
     --white: #ffffff;
-    --gray-100: #f5f5f5;
+    --gray-100: #fafafa;
     --gray-200: #e0e0e0;
     --gray-300: #cccccc;
     --gray-400: #b8b8b8;
@@ -19,7 +19,7 @@
 }
 
 body {
-    background: var(--white);
+    background: var(--gray-100);
     color: var(--black);
     -webkit-font-smoothing: antialiased;
 }

@@ -1,0 +1,15 @@
+.wrapper {
+    max-width: 110rem;
+    margin: 4px;
+
+    display: grid;
+    grid-template-columns: 256px 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.wrapper aside {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--white);
+}
