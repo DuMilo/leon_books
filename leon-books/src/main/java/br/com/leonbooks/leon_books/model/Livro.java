@@ -1,19 +1,21 @@
 package br.com.leonbooks.leon_books.model;
 
 public class Livro {
+    private static int proximoId = 1;
+
     private Integer id;
     private String titulo;
     private String autor;
     private boolean disponivel;
 
-    public Livro(Integer id, String titulo, String autor){
-        this.id = id;
+    public Livro(String titulo, String autor){
+        this.id = proximoId++;
         this.titulo = titulo;
         this.autor = autor;
         this.disponivel = true;
     }
 
-    public Integer getId(){
+    public int getId(){
         return id;
     }
     public String getTitulo(){

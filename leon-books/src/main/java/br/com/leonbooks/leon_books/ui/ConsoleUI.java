@@ -85,7 +85,7 @@ public class ConsoleUI implements CommandLineRunner {
         System.out.print("Autor: ");
         String autor = scanner.nextLine();
 
-        Livro novoLivro = new Livro(null, titulo, autor);
+        Livro novoLivro = new Livro(titulo, autor);
         livroService.cadastraLivro(novoLivro);
         
         System.out.println("Livro cadastrado com sucesso!");

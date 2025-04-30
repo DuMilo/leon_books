@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public class LivroRepository {
     private final List<Livro> livros = new ArrayList<>();
-    private int proximoId = 1;
 
     public List<Livro> buscarTodos() {
         return new ArrayList<>(livros);
@@ -22,8 +21,8 @@ public class LivroRepository {
     }
 
     public Livro salvar(Livro livro) {
-        if (livro.getId() == null) {
-            Livro novoLivro = new Livro(proximoId++, livro.getTitulo(), livro.getAutor());
+        if (livro.getId() == 0) {
+            Livro novoLivro = new Livro(livro.getTitulo(), livro.getAutor());
             livros.add(novoLivro);
             return novoLivro;
         } else {
