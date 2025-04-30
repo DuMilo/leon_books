@@ -31,7 +31,7 @@ public class LivroController {
     }
 
     @GetMapping("/{id}")
-    public Livro buscarLivroPorId(@PathVariable Integer id){
-        return livroService.buscarLivroPorId(id).orElse(null);
+    public Livro buscarLivroPorId(@PathVariable int id){
+        return livroService.buscarLivroPorId(id).orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
     }
 }

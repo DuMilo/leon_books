@@ -27,7 +27,15 @@ public class LivroService {
         return livroRepository.salvar(livro);
     }
 
-    public Optional<Livro> buscarLivroPorId(Integer id){
+    public Optional<Livro> buscarLivroPorId(int id){
         return livroRepository.buscarPorId(id);
+    }
+
+    public Optional<Livro> buscarLivroPorId(String id) {
+        try {
+            return buscarLivroPorId(Integer.parseInt(id));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 }

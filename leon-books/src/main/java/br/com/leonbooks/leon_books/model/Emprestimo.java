@@ -3,7 +3,9 @@ package br.com.leonbooks.leon_books.model;
 import java.time.LocalDate;
 
 public class Emprestimo {
-    private String id;
+    private static int proximoId = 1;
+
+    private int id;
     private Livro livro;
     private Cliente cliente;
     private LocalDate dataEmprestimo;
@@ -11,8 +13,8 @@ public class Emprestimo {
     private boolean devolvido;
     private boolean renovado;
 
-    public Emprestimo(String id, Livro livro, Cliente cliente) {
-        this.id = id;
+    public Emprestimo(Livro livro, Cliente cliente) {
+        this.id = proximoId++;
         this.livro = livro;
         this.cliente = cliente;
         this.dataEmprestimo = LocalDate.now();
@@ -21,13 +23,13 @@ public class Emprestimo {
         this.renovado = false;
     }
 
-    public String getId(){
+    public int getId(){
         return id;
     }
     public Livro getLivro(){
         return livro;
     }
-    public Cliente getUsuario(){
+    public Cliente getCliente(){
         return cliente;
     }
     public LocalDate getDataEmprestimo(){

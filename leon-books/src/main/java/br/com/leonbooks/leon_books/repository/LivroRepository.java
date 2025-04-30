@@ -12,27 +12,28 @@ public class LivroRepository {
     private final List<Livro> livros = new ArrayList<>();
     private int proximoId = 1;
 
-    public List<Livro> buscarTodos(){
+    public List<Livro> buscarTodos() {
         return new ArrayList<>(livros);
     }
 
-    public Optional<Livro> buscarPorId(Integer id) {
-        return livros.stream().filter(l -> l.getId().equals(id)).findFirst();
+    // Mudança: Integer -> int (e ajuste na comparação)
+    public Optional<Livro> buscarPorId(int id) {
+        return livros.stream().filter(l -> l.getId() == id).findFirst();
     }
 
     public Livro salvar(Livro livro) {
         if (livro.getId() == null) {
-            Livro novoLivro = new Livro(proximoId++, livro.getTitulo(), livro.getAutor(), livro.getIsbn());
+            Livro novoLivro = new Livro(proximoId++, livro.getTitulo(), livro.getAutor());
             livros.add(novoLivro);
             return novoLivro;
         } else {
-            livros.removeIf(l -> l.getId().equals(livro.getId()));
+            livros.removeIf(l -> l.getId() == livro.getId());
             livros.add(livro);
             return livro;
         }
     }
 
-    public List<Livro> buscarDisponiveis(){
+    public List<Livro> buscarDisponiveis() {
         return livros.stream().filter(Livro::isDisponivel).toList();
     }
 }
