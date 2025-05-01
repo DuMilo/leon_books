@@ -48,7 +48,16 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 ## Entrega 3
 
--- Em Andamento --
+### Screencast [3ª Entrega]
+Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 3ª entrega.
+
+* <a href="">Screencast das Implementações [3ª Entrega]</a>
+
+
+### Testes Automatizados
+Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Books.
+
+* <a href="https://youtu.be/yxdoHR6BNmw">Testes Automatizados</a>
 
 ## Projeto de Programação Orientada a Objetos - 2025.1 - CESAR School
 
