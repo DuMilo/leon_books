@@ -48,10 +48,15 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 ## Entrega 3
 
+### Diagrama de Classes Atualizado
+Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
+
+![Image](https://github.com/user-attachments/assets/1c5afb72-e72f-4b2f-ba0b-26746e95ca50)
+
 ### Screencast [3ª Entrega]
 Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 3ª entrega.
 
-* <a href="">Screencast das Implementações [3ª Entrega]</a>
+* <a href="https://youtu.be/xcK8Ij3ab54?si=oK0dfTfnZS_0bmLR">Screencast das Implementações [3ª Entrega]</a>
 
 
 ### Testes Automatizados
