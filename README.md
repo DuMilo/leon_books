@@ -48,6 +48,23 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 ## Entrega 3
 
+### Implementação de Histórias
+
+Foram desenvolvidas 2 (duas) histórias do KanBan para nossa aplicação, sendo elas 'Realizar cadastro de usuários' e 'Realizar empréstimo de livros'.
+
+![Historias-3entrega](https://github.com/user-attachments/assets/e37ac020-7af1-46b1-9472-bdab24ed09b4)
+
+### Issue/BugTracker
+Disponibilizamos abaixo o estado atual das issues e bugs do projeto.
+
+Closed (concluídas):
+
+![Issues-Closed](https://github.com/user-attachments/assets/25fb8ac9-e73c-4756-b13a-504526e37bd0)
+
+Open (não concluídas):
+
+![Issues-Open](https://github.com/user-attachments/assets/92bf9e97-26a0-447c-a942-9a80b7f8e3f7)
+
 ### Diagrama de Classes Atualizado
 Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
 
