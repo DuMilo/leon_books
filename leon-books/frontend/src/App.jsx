@@ -13,7 +13,7 @@ export function App() {
           <Sidebar />
 
           <main>
-            aqui é o main
+            Main
           </main>
           
         </div>
