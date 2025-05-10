@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import styles from './Sidebar.module.css';
 import DBIcon from '../assets/dashboard.png';
 import LIcon from '../assets/livros.png';
@@ -6,7 +8,7 @@ import RIcon from '../assets/retornos.png';
 
 export function Sidebar() {
     return(
-        <aside className={styles.sidebar}>
+      <aside className={styles.sidebar}>
         <div>
           <img src={DBIcon} alt='Dashboard'/>
           <p>Dashboard</p>

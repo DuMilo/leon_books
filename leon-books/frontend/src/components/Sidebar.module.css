@@ -14,3 +14,19 @@
 .sidebar div p {
     font-size: 16px;
 }
+
+.sidebarItem {
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.3s;
+}
+
+.sidebarItem:hover {
+    background-color: #f0f0f0; /* Cor de hover */
+}
+
+/* Estilo para o item ativo */
+.sidebarItem.active {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
