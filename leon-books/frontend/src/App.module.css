@@ -10,3 +10,9 @@
 .wrapper main {
     padding: 26px;
 }
+
+@media (max-width: 768px){
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+}

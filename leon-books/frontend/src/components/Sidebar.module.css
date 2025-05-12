@@ -2,31 +2,29 @@
     width: 220px;
     min-height: 100vh;
     background: var(--white);
+    overflow: hidden;
 }
 
-.sidebar div {
-    margin: 26px 27px 0 30px;
+.profile div {
+    margin: 16px 0 0 20px;
     display: flex;         
     align-items: center;
     gap: 12px;
-}
 
-.sidebar div p {
     font-size: 16px;
+    background: transparent;
+    color: var(--black);
+    border-radius: 10px 0 0 10px;
+    padding: 0.75rem; /* top right down left */
+
+    transition: background-color 0.25s;
 }
 
-.sidebarItem {
+.profile div a {
     text-decoration: none;
-    color: inherit;
-    transition: background-color 0.3s;
+    color: var(--black);
 }
 
-.sidebarItem:hover {
-    background-color: #f0f0f0; /* Cor de hover */
-}
-
-/* Estilo para o item ativo */
-.sidebarItem.active {
-    background-color: #e0e0e0;
-    font-weight: bold;
+.profile div:hover {
+    background: var(--gray-100);
 }

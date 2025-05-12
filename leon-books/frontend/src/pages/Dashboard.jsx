@@ -2,6 +2,8 @@ import styles from './Dashboard.module.css'
 
 export function Dashboard() {
     return (
-        <p>oi</p>
+        <div className={styles.dashboard}> 
+
+        </div>
     )
 }
