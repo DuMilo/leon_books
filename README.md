@@ -4,6 +4,8 @@
 
 * **Cadastro de Livros**: Adicionar novos títulos ao acervo, incluindo informações como título, autor, editora, ISBN, gênero e sinopse.
 
+* **Cadastro de Leitores**: Cadastrar novos membros na plataforma, incluindo informações importantes sobre livros emprestados, retornos e gerenciamento geral de multas e lembretes.
+
 * **Pesquisa Avançada**: Localizar livros por diversos critérios, como autor, título, gênero ou palavras-chave.
 
 * **Gerenciamento de Empréstimos**: Controlar o empréstimo e devolução de livros, com prazos e notificações de atraso.
