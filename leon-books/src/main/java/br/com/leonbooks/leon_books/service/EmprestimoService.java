@@ -5,6 +5,7 @@ import br.com.leonbooks.leon_books.model.Emprestimo;
 import br.com.leonbooks.leon_books.model.Livro;
 import br.com.leonbooks.leon_books.repository.EmprestimoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,16 +22,15 @@ public class EmprestimoService {
         this.clienteService = clienteService;
     }
 
-    public Emprestimo realizarEmprestimo(int livroId, int clienteId) {
-        Livro livro = livroService.buscarLivroPorId(livroId)
-            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
+    @Transactional
+    public Emprestimo realizarEmprestimo(Long livroId, Long clienteId) {
+        Livro livro = livroService.buscarLivroPorId(livroId).orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
 
         if (!livro.isDisponivel()) {
             throw new IllegalStateException("Livro já emprestado!");
         }
 
-        Cliente cliente = clienteService.buscarPorId(clienteId)
-            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
+        Cliente cliente = clienteService.buscarPorId(clienteId).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
 
         if (clienteTemAtrasos(clienteId)) {
             throw new IllegalStateException("Cliente com empréstimos atrasados!");
@@ -41,34 +41,55 @@ public class EmprestimoService {
         livro.setDisponivel(false);
         livroService.cadastraLivro(livro);
 
-        cliente.adicionarEmprestimo(emprestimo);
-
-        return emprestimoRepository.salvar(emprestimo);
+        return emprestimoRepository.save(emprestimo);
     }
 
-    public List<Emprestimo> buscarPorCliente(int clienteId) {
-        return emprestimoRepository.buscarPorCliente(clienteId);
+    @Transactional
+    public void devolverLivro(Long emprestimoId) {
+        Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
+            .orElseThrow(() -> new IllegalArgumentException("Empréstimo não encontrado!"));
+
+        if (emprestimo.isDevolvido()) {
+            throw new IllegalStateException("Livro já foi devolvido anteriormente.");
+        }
+
+        emprestimo.setDevolvido(true);
+        Livro livro = emprestimo.getLivro();
+        livro.setDisponivel(true);
+        
+        livroService.cadastraLivro(livro);
+        emprestimoRepository.save(emprestimo);
     }
 
-    public List<Emprestimo> buscarPorLivro(int livroId) {
-        return emprestimoRepository.buscarPorLivro(livroId);
+    @Transactional
+    public void renovarEmprestimo(Long emprestimoId) {
+        Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
+            .orElseThrow(() -> new IllegalArgumentException("Empréstimo não encontrado!"));
+
+        if (emprestimo.isDevolvido()) {
+            throw new IllegalStateException("Não é possível renovar um empréstimo já devolvido.");
+        }
+
+        if (emprestimo.isRenovado()) {
+            throw new IllegalStateException("Este empréstimo já foi renovado anteriormente.");
+        }
+
+        emprestimo.renovarEmprestimo();
+        emprestimoRepository.save(emprestimo);
     }
 
-    private boolean clienteTemAtrasos(int clienteId) {
-        List<Emprestimo> emprestimos = emprestimoRepository.buscarPorCliente(clienteId);
+    public List<Emprestimo> buscarPorCliente(Long clienteId) {
+        return emprestimoRepository.findByClienteId(clienteId);
+    }
+
+    public List<Emprestimo> buscarPorLivro(Long livroId) {
+        return emprestimoRepository.findByLivroId(livroId);
+    }
+
+    private boolean clienteTemAtrasos(Long clienteId) {
+        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteId(clienteId);
         LocalDate hoje = LocalDate.now();
         return emprestimos.stream()
             .anyMatch(e -> !e.isDevolvido() && e.getDataDevolucao().isBefore(hoje));
-    }
-
-    public Emprestimo realizarEmprestimo(String livroId, String clienteId) {
-        try {
-            return realizarEmprestimo(
-                Integer.parseInt(livroId),
-                Integer.parseInt(clienteId)
-            );
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("IDs devem ser números válidos!");
-        }
     }
 }

@@ -3,59 +3,84 @@ package br.com.leonbooks.leon_books;
 import br.com.leonbooks.leon_books.model.Livro;
 import br.com.leonbooks.leon_books.repository.LivroRepository;
 import br.com.leonbooks.leon_books.service.LivroService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
-public class LivroServiceTest {
-    private LivroService livroService;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class LivroServiceTest {
+
+    @Mock
     private LivroRepository livroRepository;
-    
+
+    @InjectMocks
+    private LivroService livroService;
+
     @BeforeEach
-    void init() {
-        livroRepository = new LivroRepository();
-        livroService = new LivroService(livroRepository);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testCadastrarLivro(){
-        Livro livro = new Livro("A Metamorfose", "Franz Kafka");
-        Livro livroSalvo = livroService.cadastraLivro(livro);
-
-        assertNotNull(livroSalvo.getId());
-        assertEquals("A Metamorfose", livroSalvo.getTitulo());
-    }
-
-    @Test
-    void testBuscarLivroPorId() {
-        Livro livro = new Livro("O Processo", "Franz Kafka");
-        livroService.cadastraLivro(livro);
+    void deveCadastrarLivroComSucesso() {
+        Livro livro = new Livro("Dom Casmurro", "Machado de Assis");
+        livro.setDisponivel(true); // Garante estado inicial
         
-        Livro encontrado = livroService.buscarLivroPorId(livro.getId()).orElse(null);
-        
-        assertNotNull(encontrado);
-        assertEquals(livro.getId(), encontrado.getId());
+        when(livroRepository.save(any(Livro.class))).thenAnswer(invocation -> {
+            Livro l = invocation.getArgument(0);
+            l.setId(1L); // Simula a geração do ID
+            return l;
+        });
+
+        Livro resultado = livroService.cadastraLivro(livro);
+
+        assertNotNull(resultado);
+        assertEquals("Dom Casmurro", resultado.getTitulo());
+        assertTrue(resultado.isDisponivel());
+        verify(livroRepository, times(1)).save(any(Livro.class));
     }
 
     @Test
-    void testRetornarListaLivrosDisponiveis() {
+    void deveBuscarLivroPorId() {
+        Long livroId = 1L;
+        Livro livro = new Livro("A Hora da Estrela", "Clarice Lispector");
+        when(livroRepository.findById(livroId)).thenReturn(Optional.of(livro));
+
+        Optional<Livro> resultado = livroService.buscarLivroPorId(livroId);
+
+        assertTrue(resultado.isPresent());
+        assertEquals("Clarice Lispector", resultado.get().getAutor());
+    }
+
+    @Test
+    void deveListarLivrosDisponiveis() {
         Livro livro1 = new Livro("Livro 1", "Autor 1");
         Livro livro2 = new Livro("Livro 2", "Autor 2");
-        livro1.setDisponivel(true);
         livro2.setDisponivel(false);
 
-        livroService.cadastraLivro(livro1);
-        livroService.cadastraLivro(livro2);
+        when(livroRepository.findLivrosDisponiveis()).thenReturn(List.of(livro1));
 
-        assertTrue(livro1.isDisponivel());
-        assertFalse(livro2.isDisponivel());
-        
         List<Livro> disponiveis = livroService.buscarLivrosDisponiveis();
-        
+
         assertEquals(1, disponiveis.size());
-        assertEquals(livro1.getId(), disponiveis.get(0).getId());
+        assertEquals("Livro 1", disponiveis.get(0).getTitulo());
+    }
+
+    @Test
+    void deveRemoverLivroExistente() {
+        Long livroId = 1L;
+        when(livroRepository.existsById(livroId)).thenReturn(true);
+
+        livroService.removerLivro(livroId);
+
+        verify(livroRepository, times(1)).deleteById(livroId);
     }
 }
