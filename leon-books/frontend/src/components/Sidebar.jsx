@@ -9,28 +9,28 @@ export function Sidebar() {
 
           <div>
             <ChartLine size={16} />
-            <a href='#'>
+            <a href='/'>
               Dashboard
             </a>
           </div>
 
           <div>
             <Books size={20} />
-            <a href='#'>
+            <a href='/livros'>
               Gerenciamento de Livros
             </a>
           </div>
 
           <div>
             <UsersThree size={20} />
-            <a href='#'>
+            <a href='/membros'>
               Gerenciamento de Membros
             </a>
           </div>
 
           <div>
             <ArrowsLeftRight size={20} />
-            <a href='#'>
+            <a href='/emprestimos'>
               Empréstimos e Retornos
             </a>     
           </div>
