@@ -1,11 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
-import { Dashboard } from './pages/Dashboard';
-import { GerenciamentoLivros } from './pages/GerenciamentoLivros';
-import { GerenciamentoMembros } from './pages/GerenciamentoMembros';
-import { EmprestimosDevolucoes } from './pages/EmprestimosDevolucoes';
+
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './Router';
+
 import './global.css';
 import styles from './App.module.css';
 
@@ -17,7 +15,9 @@ export function App() {
 
         <div className={styles.wrapper}>
           <Sidebar />
-
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
           <main>
             
           </main>
