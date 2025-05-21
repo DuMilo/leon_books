@@ -15,12 +15,10 @@ export function App() {
 
         <div className={styles.wrapper}>
           <Sidebar />
+
           <BrowserRouter>
             <Router />
           </BrowserRouter>
-          <main>
-            
-          </main>
           
         </div>
     </div>
