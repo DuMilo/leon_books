@@ -1,0 +1,16 @@
+.livros {
+    width: 1184px;
+}
+
+.boxes {
+    display: flex;
+    gap: 379px;
+}
+
+.box {
+    width: 362px;
+    height: 140px;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 40px;
+}

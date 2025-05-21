@@ -4,6 +4,7 @@
 
 .boxes {
     display: flex;
+    gap: 40px;
 }
 
 .box {
@@ -11,21 +12,21 @@
     height: 140px;
     background-color: var(--white);
     border-radius: 10px;
-    margin: 40px;
+    margin-top: 40px;
 }
 
 .bigbox {
-    width: 1108px;
+    width: 1170px;
     height: 224px;
     background-color: var(--white);
     border-radius: 10px;
-    margin: 40px;
+    margin-top: 40px;
 }
 
 .twoboxes {
-    width: 1108px;
+    width: 565px;
     height: 224px;
     background-color: var(--white);
     border-radius: 10px;
-    margin: 42px;
+    margin-top: 40px;
 }
