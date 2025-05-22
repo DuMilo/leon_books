@@ -1,5 +1,9 @@
 import styles from './GerenciamentoMembros.module.css'
 
 export function GerenciamentoMembros() {
-    return
+    return (
+        <div className={styles.membros}>
+            
+        </div>
+    )
 }

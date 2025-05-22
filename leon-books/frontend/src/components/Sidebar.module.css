@@ -28,3 +28,7 @@
 .profile div:hover {
     background: var(--gray-100);
 }
+
+.profile div:active{
+    background: var(--gray-200);
+}

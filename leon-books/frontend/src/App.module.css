@@ -1,18 +1,8 @@
 .wrapper {
     min-width: 100vh;
-    margin: 4px; /* top right down left */
+    margin: 2px 0 0 0; /* top right down left */
     display: grid;
-    grid-template-columns: 256px 1fr;
+    grid-template-columns: 410px 1fr;
     gap: 26px;
     align-items: flex-start;
-}
-
-.wrapper main {
-    padding: 26px;
-}
-
-@media (max-width: 768px){
-    .wrapper {
-        grid-template-columns: 1fr;
-    }
 }

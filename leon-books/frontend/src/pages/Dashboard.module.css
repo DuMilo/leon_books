@@ -13,7 +13,27 @@
     background-color: var(--white);
     border-radius: 10px;
     margin-top: 40px;
+    display: block;
+    padding: 26px 225px 0px 24px;
+    box-shadow: 0 10px 10px #E5E7EB ;
 }
+
+.title {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.number {
+    font-size: 24px;
+    padding: 25px 0 0 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--gray-800);
+    white-space: nowrap;
+}
+
 
 .bigbox {
     width: 1170px;
@@ -21,6 +41,28 @@
     background-color: var(--white);
     border-radius: 10px;
     margin-top: 40px;
+    box-shadow: 0 10px 10px #E5E7EB ;
+}
+
+.titlebigbox {
+    font-size: 18px; /* top right down left */
+    padding: 27px 938px 0 24px;
+}
+
+.members {
+    padding: 25px 718px 0px 30px;
+    display: flex;
+}
+
+.notificationname{
+    font-size: 16px;
+    padding: 3px 0 0 8px;
+}
+
+.notificationtime {
+    color: var(--gray-800);
+    font-size: 14px;
+    padding: 0 0 0 70px;
 }
 
 .twoboxes {
@@ -29,4 +71,24 @@
     background-color: var(--white);
     border-radius: 10px;
     margin-top: 40px;
+    box-shadow: 0 10px 7px #E5E7EB ;
+}
+
+.notification {
+    padding: 29px 428px 0 22px; /* top right down left */
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.belowboxes {
+    padding: 30px 0 0px 23px;
+}
+
+.boldnotification {
+    font-size: 16px;
+}
+
+.graynotification {
+    font-size: 14px;
+    color: var(--gray-800);
 }

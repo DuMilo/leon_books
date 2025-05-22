@@ -18,7 +18,7 @@
     box-sizing: border-box;
 }
 
-body {
+body, html {
     background: var(--gray-100);
     color: var(--black);
     -webkit-font-smoothing: antialiased;
