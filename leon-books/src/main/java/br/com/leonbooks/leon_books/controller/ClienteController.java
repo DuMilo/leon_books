@@ -30,11 +30,16 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/por-nome/{nome}")
-    public ResponseEntity<Cliente> buscarPorNome(@PathVariable String nome) {
-        return clienteService.buscarPorNome(nome)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/buscar-por-nome")
+    public ResponseEntity<List<Cliente>> buscarPorNome(@RequestParam String nome) {
+        List<Cliente> clientes = clienteService.buscarPorNome(nome);
+        return ResponseEntity.ok(clientes);
+    }
+
+    @GetMapping("/buscar-por-email")
+    public ResponseEntity<List<Cliente>> buscarPorEmail(@RequestParam String email) {
+        List<Cliente> clientes = clienteService.buscarPorEmail(email);
+        return ResponseEntity.ok(clientes);
     }
 
     @GetMapping

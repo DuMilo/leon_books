@@ -18,10 +18,10 @@ public class EmprestimoController {
         this.emprestimoService = emprestimoService;
     }
 
-    @PostMapping
-    public ResponseEntity<Emprestimo> realizarEmprestimo(
-            @RequestParam Long livroId,
-            @RequestParam Long clienteId) {
+    @PostMapping("/novo-emprestimo")
+    public ResponseEntity<Emprestimo> criarEmprestimo(
+            @RequestParam Long clienteId,
+            @RequestParam Long livroId) {
         Emprestimo emprestimo = emprestimoService.realizarEmprestimo(livroId, clienteId);
         return ResponseEntity.status(HttpStatus.CREATED).body(emprestimo);
     }
@@ -33,11 +33,11 @@ public class EmprestimoController {
     }
 
     @PostMapping("/{id}/renovar")
-    public ResponseEntity<Emprestimo> renovarEmprestimo(@PathVariable Long id) {
+    public ResponseEntity<Void> renovarEmprestimo(@PathVariable Long id) {
         emprestimoService.renovarEmprestimo(id);
         return ResponseEntity.noContent().build();
     }
-
+    
     @GetMapping("/por-cliente/{clienteId}")
     public List<Emprestimo> listarPorCliente(@PathVariable Long clienteId) {
         return emprestimoService.buscarPorCliente(clienteId);

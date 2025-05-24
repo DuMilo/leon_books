@@ -16,7 +16,7 @@ public class EmprestimoService {
     private final LivroService livroService;
     private final ClienteService clienteService;
 
-    public EmprestimoService(EmprestimoRepository emprestimoRepository, LivroService livroService, ClienteService clienteService){
+    public EmprestimoService(EmprestimoRepository emprestimoRepository, LivroService livroService, ClienteService clienteService) {
         this.emprestimoRepository = emprestimoRepository;
         this.livroService = livroService;
         this.clienteService = clienteService;
@@ -24,20 +24,24 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo realizarEmprestimo(Long livroId, Long clienteId) {
-        Livro livro = livroService.buscarLivroPorId(livroId).orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
+        Livro livro = livroService.buscarLivroPorId(livroId)
+            .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
 
         if (!livro.isDisponivel()) {
             throw new IllegalStateException("Livro já emprestado!");
         }
 
-        Cliente cliente = clienteService.buscarPorId(clienteId).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
+        Cliente cliente = clienteService.buscarPorId(clienteId)
+            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
 
         if (clienteTemAtrasos(clienteId)) {
             throw new IllegalStateException("Cliente com empréstimos atrasados!");
         }
 
         Emprestimo emprestimo = new Emprestimo(livro, cliente);
-
+        
+        cliente.adicionarEmprestimo(emprestimo);
+        
         livro.setDisponivel(false);
         livroService.cadastraLivro(livro);
 
@@ -56,7 +60,7 @@ public class EmprestimoService {
         emprestimo.setDevolvido(true);
         Livro livro = emprestimo.getLivro();
         livro.setDisponivel(true);
-        
+
         livroService.cadastraLivro(livro);
         emprestimoRepository.save(emprestimo);
     }
@@ -74,6 +78,10 @@ public class EmprestimoService {
             throw new IllegalStateException("Este empréstimo já foi renovado anteriormente.");
         }
 
+        if (emprestimo.estaAtrasado()) {
+            throw new IllegalStateException("Não é possível renovar empréstimo atrasado.");
+        }
+
         emprestimo.renovarEmprestimo();
         emprestimoRepository.save(emprestimo);
     }
@@ -86,9 +94,14 @@ public class EmprestimoService {
         return emprestimoRepository.findByLivroId(livroId);
     }
 
+    public List<Emprestimo> buscarTodosEmprestimos() {
+        return emprestimoRepository.findAll();
+    }
+
     private boolean clienteTemAtrasos(Long clienteId) {
         List<Emprestimo> emprestimos = emprestimoRepository.findByClienteId(clienteId);
         LocalDate hoje = LocalDate.now();
+        
         return emprestimos.stream()
             .anyMatch(e -> !e.isDevolvido() && e.getDataDevolucao().isBefore(hoje));
     }

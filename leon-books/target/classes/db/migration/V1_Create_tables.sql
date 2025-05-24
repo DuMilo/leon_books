@@ -20,3 +20,12 @@ CREATE TABLE emprestimos (
     devolvido BOOLEAN NOT NULL DEFAULT FALSE,
     renovado BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE multas (
+    id BIGSERIAL PRIMARY KEY,
+    emprestimo_id BIGINT NOT NULL REFERENCES emprestimos(id),
+    valor DECIMAL(10,2) NOT NULL,
+    data_aplicacao DATE NOT NULL,
+    data_pagamento DATE,
+    paga BOOLEAN NOT NULL DEFAULT FALSE
+);

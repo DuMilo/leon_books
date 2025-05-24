@@ -10,11 +10,11 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
@@ -37,6 +37,8 @@ public class Emprestimo {
         this.cliente = cliente;
         this.dataEmprestimo = LocalDate.now();
         this.dataDevolucao = LocalDate.now().plusDays(14);
+        this.devolvido = false;
+        this.renovado = false;
     }
 
     public Long getId(){
@@ -89,6 +91,10 @@ public class Emprestimo {
 
     public boolean isRenovado(){
         return renovado;
+    }
+
+    public boolean estaAtrasado() {
+        return !devolvido && LocalDate.now().isAfter(dataDevolucao);
     }
 
     public void setRenovado(boolean renovado) {

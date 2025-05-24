@@ -39,6 +39,14 @@ public class LivroService {
         return livroRepository.findById(id);
     }
 
+    public List<Livro> buscarPorTitulo(String titulo) {
+        return livroRepository.findByTituloContainingIgnoreCase(titulo);
+    }
+
+    public List<Livro> buscarPorAutor(String autor) {
+        return livroRepository.findByAutorContainingIgnoreCase(autor);
+    }
+
     @Transactional
     public void atualizarLivro(Livro livro) {
         if (!livroRepository.existsById(livro.getId())) {

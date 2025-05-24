@@ -83,4 +83,27 @@ class LivroServiceTest {
 
         verify(livroRepository, times(1)).deleteById(livroId);
     }
+
+    @Test
+    void deveBuscarLivrosPorTitulo() {
+        Livro livro = new Livro("Dom Casmurro", "Machado de Assis");
+        when(livroRepository.findByTituloContainingIgnoreCase("dom")).thenReturn(List.of(livro));
+        
+        List<Livro> resultado = livroService.buscarPorTitulo("dom");
+        
+        assertEquals(1, resultado.size());
+        assertEquals("Dom Casmurro", resultado.get(0).getTitulo());
+    }
+
+    @Test
+    void deveBuscarLivrosPorAutor() {
+        Livro livro1 = new Livro("Livro 1", "Machado de Assis");
+        Livro livro2 = new Livro("Livro 2", "Machado de Assis");
+        when(livroRepository.findByAutorContainingIgnoreCase("machado")).thenReturn(List.of(livro1, livro2));
+        
+        List<Livro> resultado = livroService.buscarPorAutor("machado");
+        
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.stream().allMatch(l -> l.getAutor().contains("Machado")));
+    }
 }

@@ -31,6 +31,18 @@ public class LivroController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/buscar-por-titulo")
+    public ResponseEntity<List<Livro>> buscarPorTitulo(@RequestParam String titulo) {
+        List<Livro> livros = livroService.buscarPorTitulo(titulo);
+        return ResponseEntity.ok(livros);
+    }
+
+    @GetMapping("/buscar-por-autor")
+    public ResponseEntity<List<Livro>> buscarPorAutor(@RequestParam String autor) {
+        List<Livro> livros = livroService.buscarPorAutor(autor);
+        return ResponseEntity.ok(livros);
+    }
+
     @GetMapping
     public List<Livro> listarTodos() {
         return livroService.buscarTodosLivros();

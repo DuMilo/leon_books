@@ -9,4 +9,7 @@ import java.util.List;
 public interface LivroRepository extends JpaRepository<Livro, Long> {
     @Query("SELECT l FROM Livro l WHERE l.disponivel = true")
     List<Livro> findLivrosDisponiveis();
+
+    List<Livro> findByTituloContainingIgnoreCase(String titulo);
+    List<Livro> findByAutorContainingIgnoreCase(String autor);
 }

@@ -34,8 +34,12 @@ public class ClienteService {
         return clienteRepository.findById(clienteId);
     }
 
-    public Optional<Cliente> buscarPorNome(String nome){
-        return clienteRepository.findByNomeIgnoreCase(nome);
+    public List<Cliente> buscarPorNome(String nome) {
+        return clienteRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    public List<Cliente> buscarPorEmail(String email) {
+        return clienteRepository.findByEmailContainingIgnoreCase(email);
     }
 
     public List<Cliente> buscarTodos(){

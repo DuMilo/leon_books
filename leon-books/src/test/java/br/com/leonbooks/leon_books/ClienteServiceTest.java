@@ -9,10 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class ClienteServiceTest {
@@ -68,5 +71,28 @@ class ClienteServiceTest {
         Optional<Cliente> resultado = clienteService.buscarPorId(1L);
 
         assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void deveBuscarClientesPorNomeParcial() {
+        Cliente cliente1 = new Cliente("João Silva", "joao@email.com");
+        Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com");
+        when(clienteRepository.findByNomeContainingIgnoreCase("silva")).thenReturn(List.of(cliente1, cliente2));
+        
+        List<Cliente> resultado = clienteService.buscarPorNome("silva");
+        
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.stream().allMatch(c -> c.getNome().contains("Silva")));
+    }
+
+    @Test
+    void deveBuscarClientesPorEmailParcial() {
+        Cliente cliente = new Cliente("Teste", "teste@gmail.com");
+        when(clienteRepository.findByEmailContainingIgnoreCase("gmail")).thenReturn(List.of(cliente));
+        
+        List<Cliente> resultado = clienteService.buscarPorEmail("gmail");
+        
+        assertEquals(1, resultado.size());
+        assertTrue(resultado.get(0).getEmail().contains("gmail"));
     }
 }
