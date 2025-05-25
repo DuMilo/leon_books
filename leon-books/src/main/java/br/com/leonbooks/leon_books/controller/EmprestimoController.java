@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -46,5 +47,11 @@ public class EmprestimoController {
     @GetMapping("/por-livro/{livroId}")
     public List<Emprestimo> listarPorLivro(@PathVariable Long livroId) {
         return emprestimoService.buscarPorLivro(livroId);
+    }
+
+    @GetMapping("/{id}/multa")
+    public ResponseEntity<BigDecimal> verificarMulta(@PathVariable Long id) {
+        BigDecimal valorMulta = emprestimoService.calcularMultaEmprestimo(id);
+        return ResponseEntity.ok(valorMulta);
     }
 }
