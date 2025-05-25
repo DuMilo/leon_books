@@ -1,6 +1,7 @@
 import styles from './GerenciamentoLivros.module.css';
 import { BookSearch } from '../components/BookSearch';
 import { useState } from 'react';
+import { Books } from 'phosphor-react';
 
 const livrosMock = [
   { isbn: 1, titulo: 'Dom Casmurro', autor: 'Machado de Assis' },
@@ -25,10 +26,30 @@ export function GerenciamentoLivros() {
 
     return (
     <div className={styles.livros}> 
+    
         <div className={styles.boxes}>
-            <div className={styles.box}>a</div>
-            <div className={styles.box}>a</div>
+
+            <div className={styles.box}>
+                <p className={styles.boxtitle}>Total de Livros</p>
+                <div className={styles.boxcontent}>
+                    <p className={styles.boxnumber}>1.031</p>
+                    <p className={styles.boxsub}>+13 esse mês</p>
+                </div>
+                <span className={styles.boxicon}>
+                    <Books size={16}/>
+                </span>
+            </div>
+    
+            <div className={styles.box}>
+                <p className={styles.boxtitle}>Ações Rápidas</p>
+                    <div className={styles.actions}>
+                        <button className={styles.actionbtn}>Adicionar Livro</button>
+                        <button className={styles.actionbtn}>Remover Livro</button>
+                    </div>
+            </div>
+
         </div>
+
       <div className={styles.booksearch}>
         <BookSearch onSearch={setBusca} />
       </div>

@@ -4,7 +4,7 @@
 
 .boxes {
     display: flex;
-    gap: 379px;
+    gap: 380px;
     padding: 0 0 19px 0;
 }
 
@@ -14,81 +14,137 @@
     background-color: var(--white);
     border-radius: 10px;
     margin-top: 40px;
-    box-shadow: 0 10px 10px #E5E7EB;
+    display: block;
+    padding: 26px 225px 0px 24px;
+    box-shadow: 0 10px 10px #E5E7EB ;
+
+    position: relative;
+}
+
+.boxtitle {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.boxcontent {
+    display: flex;
+    flex-direction: column;
+}
+
+.boxnumber {
+    font-size: 24px;
+    padding: 25px 0 0 0;
+}
+
+.boxsub {
+    font-size: 14px;
+    color: var(--gray-800);
+    white-space: nowrap;
+}
+
+.boxicon {
+    position: absolute;
+    top: 26px;
+    right: 24px;
+    font-size: 16px;
+    color: var(--gray-900);
+}
+
+
+.actions {
+    display: flex;
+    gap: 16px; 
+    padding: 30px 0 25px 0; /*top right down left*/
+}
+
+.actionbtn {
+    padding: 10px 29px;
+    border: 1px solid #E5E7EB; 
+    background-color: var(--white);
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.actionbtn:hover {
+    background: #eee;
 }
 
 .booksearch {
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: flex-start;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .searchbox {
-  display: flex;
-  justify-content: center;
-  background: var(--white);
-  border-radius: 10px;
-  padding: 34px 40px 41px 39px;
-  width: 1108px;
-  box-shadow: 0 10px 10px #E5E7EB;
+    display: flex;
+    justify-content: center;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 34px 40px 41px 39px;
+    width: 1108px;
+    box-shadow: 0 10px 10px #E5E7EB;
 }
 
 .searchboxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem; /* top right down left */
-  width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem; /* top right down left */
+    width: 100%;
 }
 
 .bookbox {
-  display: flex;
-  gap: 1rem;
-  background: var(--white);
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  align-items: center;
+    display: flex;
+    gap: 1rem;
+    background: var(--white);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    align-items: center;
 }
 
 .bookimage {
-  background-color: #e5e5e5;
-  width: 80px;
-  height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #888;
-  font-size: 14px;
-  border-radius: 4px;
+    background-color: #e5e5e5;
+    width: 80px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    font-size: 14px;
+    border-radius: 4px;
 }
 
 .bookinfo {
-  flex: 1;
+    flex: 1;
 }
 
 .booktitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
 }
 
 .bookauthor {
-  font-size: 14px;
-  color: #555;
-  margin: 4px 0 8px;
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0 8px;
 }
 
 .editbutton {
-  background-color: #f3f3f3;
-  border: none;
-  padding: 8px 60px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
+    background-color: #f3f3f3;
+    border: none;
+    padding: 8px 60px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 
 .editbutton:hover {
-  background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
