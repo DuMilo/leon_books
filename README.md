@@ -91,7 +91,6 @@ Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Bo
 * Front-end: React.js
 * Banco de Dados: PostgreSQL 
 * Prototipagem: Figma
-* Integração e Deploy: Docker
 
 <h3>Integrantes da Equipe</h3>
 
