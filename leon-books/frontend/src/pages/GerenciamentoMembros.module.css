@@ -1,0 +1,119 @@
+
+.boxes {
+    display: flex;
+    gap: 444px;
+    padding: 0 0 19px 0;
+}
+
+.box {
+    width: 362px;
+    height: 140px;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 40px;
+    display: block;
+    padding: 26px 225px 0px 24px;
+    box-shadow: 0 10px 10px #E5E7EB ;
+
+    position: relative;
+}
+
+.title {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.number {
+    font-size: 24px;
+    padding: 25px 0 0 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--gray-800);
+    white-space: nowrap;
+}
+
+.boxicon {
+    position: absolute;
+    top: 26px;
+    right: 24px;
+    font-size: 16px;
+    color: var(--gray-900);
+}
+
+.membersearch {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.searchbox {
+    display: flex;
+    justify-content: center;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 34px 40px 41px 39px;
+    width: 1170px;
+    box-shadow: 0 10px 10px #E5E7EB;
+}
+
+.searchboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem; /* top right down left */
+    width: 100%;
+}
+
+.bookbox {
+    display: flex;
+    gap: 1rem;
+    background: var(--white);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    align-items: center;
+}
+
+.bookimage {
+    background-color: #e5e5e5;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    font-size: 14px;
+    border-radius: 50px;
+}
+
+.bookinfo {
+    flex: 1;
+}
+
+.booktitle {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.bookauthor {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0 8px;
+}
+
+.editbutton {
+    background-color: #f3f3f3;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.editbutton:hover {
+    background-color: #e0e0e0;
+}

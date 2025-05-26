@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import styles from './BookSearch.module.css';
 import { MagnifyingGlass } from 'phosphor-react';
+import { useState } from 'react';
+import styles from './SearchBox.module.css';
 
-export function BookSearch({ onSearch }) {
+export function SearchBox({ onSearch }) {
   const [input, setInput] = useState('');
 
   const handleChange = (e) => {
@@ -14,7 +14,7 @@ export function BookSearch({ onSearch }) {
     <div className={styles.searchContainer}>
       <input
         type="text"
-        placeholder="Procurar livros..."
+        placeholder="Procurar..."
         value={input}
         onChange={handleChange}
         className={styles.searchInput}

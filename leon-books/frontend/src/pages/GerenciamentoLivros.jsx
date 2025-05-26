@@ -1,7 +1,9 @@
-import styles from './GerenciamentoLivros.module.css';
-import { BookSearch } from '../components/BookSearch';
-import { useState } from 'react';
 import { Books } from 'phosphor-react';
+
+import { useState } from 'react';
+
+import { SearchBox } from '../components/SearchBox';
+import styles from './GerenciamentoLivros.module.css';
 
 const livrosMock = [
   { isbn: 1, titulo: 'Dom Casmurro', autor: 'Machado de Assis' },
@@ -36,7 +38,7 @@ export function GerenciamentoLivros() {
                     <p className={styles.boxsub}>+13 esse mês</p>
                 </div>
                 <span className={styles.boxicon}>
-                    <Books size={16}/>
+                    <Books size={20}/>
                 </span>
             </div>
     
@@ -51,7 +53,7 @@ export function GerenciamentoLivros() {
         </div>
 
       <div className={styles.booksearch}>
-        <BookSearch onSearch={setBusca} />
+        <SearchBox onSearch={setBusca} />
       </div>
 
       <div className={styles.searchbox}>
@@ -59,10 +61,10 @@ export function GerenciamentoLivros() {
           {livrosExibidos.map((livro) => (
             <div key={livro.id} className={styles.bookbox}>
               <div className={styles.bookimage}>Livro</div>
-              <div className={styles.bookinfo}>
-                <p className={styles.booktitle}>{livro.titulo}</p>
-                <p className={styles.bookauthor}>{livro.autor}</p>
-                <button className={styles.editbutton}>Editar</button>
+                <div className={styles.bookinfo}>
+                    <p className={styles.booktitle}>{livro.titulo}</p>
+                    <p className={styles.bookauthor}>{livro.autor}</p>
+                    <button className={styles.editbutton}>Editar</button>
               </div>
             </div>
           ))}
