@@ -46,12 +46,12 @@ export function GerenciamentoMembros() {
             <div className={styles.searchbox}>
                 <div className={styles.searchboxes}>
                     {membrosExibidos.map((membro) => (
-                        <div key={membro.id} className={styles.bookbox}>
-                            <div className={styles.bookimage}>Membro</div>
-                                <div className={styles.bookinfo}>
-                                    <p className={styles.booktitle}>{membro.nome}</p>
-                                    <p className={styles.bookauthor}>{membro.email}</p>
-                                    <button className={styles.editbutton}>Detalhes do Perfil</button>
+                        <div key={membro.id} className={styles.memberbox}>
+                            <div className={styles.memberimage}>Membro</div>
+                                <div className={styles.memberinfo}>
+                                    <p className={styles.membername}>{membro.nome}</p>
+                                    <p className={styles.memberemail}>{membro.email}</p>
+                                    <button className={styles.detailbutton}>Detalhes do Perfil</button>
                                 </div>
                         </div>
           ))}
