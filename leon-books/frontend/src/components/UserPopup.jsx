@@ -31,10 +31,6 @@ export function UserPopup({ membro, onClose }) {
 
         <p className={styles.emprestimo}>Livros em Empréstimo</p>
 
-        <div className={styles.buscaLivros}>
-          <SearchBox onSearch={setBusca} />
-        </div>
-
         {livrosFiltrados.length > 0 ? (
           <div className={styles.livrosContainer}>
             {livrosFiltrados.map((livro, index) => (
