@@ -3,21 +3,26 @@ import { SearchBox } from '../components/SearchBox';
 import { Handshake } from 'phosphor-react';
 import { useState } from 'react';
 
-const emprestimosMock = [
-  { id: 1, titulo: 'O Pequeno Príncipe', autor: 'Antoine de Saint-Exupéry', status: 'em dia' },
-  { id: 2, titulo: 'Dom Casmurro', autor: 'Machado de Assis', status: 'atrasado' },
-  { id: 3, titulo: '1984', autor: 'George Orwell', status: 'em dia' },
-  { id: 4, titulo: 'Capitães da Areia', autor: 'Jorge Amado', status: 'atrasado' },
+const livrosMock = [
+  { isbn: 1, titulo: 'Dom Casmurro', autor: 'Machado de Assis' },
+  { isbn: 2, titulo: 'A Moreninha', autor: 'Joaquim Manuel de Macedo' },
+  { isbn: 3, titulo: 'O Cortiço', autor: 'Aluísio Azevedo' },
+  { isbn: 4, titulo: 'Capitães da Areia', autor: 'Jorge Amado' },
+  { isbn: 5, titulo: 'Memórias Póstumas de Brás Cubas', autor: 'Machado de Assis' },
+  { isbn: 6, titulo: 'Mo Dao Zu Shi', autor: 'Mo Xiang Tong Xiu'},
+  { isbn: 7, titulo: 'Erha He Ta De Bai Mao Shizun', autor: 'Rou Bao Bu Chi Rou'}
 ];
 
 export function EmprestimosDevolucoes() {
-  const [busca, setBusca] = useState('');
-
-  const emprestimosFiltrados = emprestimosMock.filter((item) =>
-    item.titulo.toLowerCase().includes(busca.toLowerCase()) ||
-    item.autor.toLowerCase().includes(busca.toLowerCase()) ||
-    item.status.toLowerCase().includes(busca.toLowerCase())
-  );
+    const [busca, setBusca] = useState('');
+    
+    const livrosFiltrados = livrosMock.filter((livro) =>
+      livro.titulo.toLowerCase().includes(busca.toLowerCase()) ||
+      livro.autor.toLowerCase().includes(busca.toLowerCase()) ||
+      String(livro.isbn).toLowerCase().includes(busca.toLowerCase())
+    );
+    
+    const livrosExibidos = livrosFiltrados.slice(0, 4);
 
   return (
     <div className={styles.emprestimo}>
@@ -32,31 +37,28 @@ export function EmprestimosDevolucoes() {
         </div>
       </div>
 
-      <div className={styles.membersearch}>
-        <SearchBox onSearch={setBusca} />
+      <div className={styles.booksearch}>
+        <SearchBox onSearch={setBusca}/>
       </div>
 
-      <div className={styles.listaEmprestimos}>
-        {emprestimosFiltrados.length > 0 ? (
-          emprestimosFiltrados.map((item) => (
-            <div key={item.id} className={styles.emprestimoCard}>
-              <p className={styles.titulo}><strong>{item.titulo}</strong></p>
-              <p className={styles.autor}>{item.autor}</p>
-              <span
-                className={
-                  item.status === 'em dia'
-                    ? styles.statusEmDia
-                    : styles.statusAtrasado
-                }
-              >
-                {item.status === 'em dia' ? 'Em dia' : 'Atrasado'}
-              </span>
+            <div className={styles.searchbox}>
+                <div className={styles.searchboxes}>
+                    {livrosExibidos.map((livro) => (
+                        <div key={livro.id} className={styles.bookbox}>
+                            <div className={styles.bookimage}>Livro</div>
+                                <div className={styles.bookinfo}>
+                                    <p className={styles.booktitle}>{livro.titulo}</p>
+                                    <p className={styles.bookauthor}>{livro.autor}</p>
+                                    <button 
+                                    className={styles.detailbutton}>
+                                        Status
+                                    </button>
+                                </div>
+                        </div>
+          ))}
+                </div>
             </div>
-          ))
-        ) : (
-          <p className={styles.semResultados}>Nenhum empréstimo encontrado.</p>
-        )}
-      </div>
+
     </div>
   );
 }
