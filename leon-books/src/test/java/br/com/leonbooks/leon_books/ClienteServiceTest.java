@@ -9,13 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class ClienteServiceTest {
@@ -26,14 +25,17 @@ class ClienteServiceTest {
     @InjectMocks
     private ClienteService clienteService;
 
+    private Cliente cliente;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        cliente = new Cliente("Sofia Travassos", "sofia@email.com");
+        cliente.setId(1L);
     }
 
     @Test
     void deveCadastrarClienteComSucesso() {
-        Cliente cliente = new Cliente("Sofia Travassos", "sofia@email.com");
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
         when(clienteRepository.existsByEmail(anyString())).thenReturn(false);
 
@@ -45,54 +47,103 @@ class ClienteServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoEmailExistente() {
-        Cliente cliente = new Cliente("Sofia Travassos", "sofia@email.com");
-        when(clienteRepository.existsByEmail("sofia@email.com")).thenReturn(true);
-
-        assertThrows(IllegalStateException.class, () -> clienteService.cadastrarCliente(cliente));
+    void deveLancarExcecaoQuandoNomeVazio() {
+        Cliente clienteInvalido = new Cliente("", "email@teste.com");
+        
+        assertThrows(IllegalArgumentException.class, 
+            () -> clienteService.cadastrarCliente(clienteInvalido));
     }
 
     @Test
-    void deveBuscarClientePorId() {
-        Long clienteId = 1L;
-        Cliente cliente = new Cliente("Sofia Travassos", "sofia@email.com");
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+    void deveLancarExcecaoQuandoEmailVazio() {
+        Cliente clienteInvalido = new Cliente("Nome", "");
+        
+        assertThrows(IllegalArgumentException.class, 
+            () -> clienteService.cadastrarCliente(clienteInvalido));
+    }
 
-        Optional<Cliente> resultado = clienteService.buscarPorId(clienteId);
+    @Test
+    void deveLancarExcecaoQuandoEmailExistente() {
+        when(clienteRepository.existsByEmail("sofia@email.com")).thenReturn(true);
+
+        assertThrows(IllegalStateException.class, 
+            () -> clienteService.cadastrarCliente(cliente));
+    }
+
+    @Test
+    void deveBuscarClientePorIdExistente() {
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+
+        Optional<Cliente> resultado = clienteService.buscarPorId(1L);
 
         assertTrue(resultado.isPresent());
         assertEquals("Sofia Travassos", resultado.get().getNome());
     }
 
     @Test
-    void deveRetornarVazioQuandoClienteNaoExiste() {
+    void deveRetornarVazioParaClienteInexistente() {
         when(clienteRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Optional<Cliente> resultado = clienteService.buscarPorId(1L);
+        Optional<Cliente> resultado = clienteService.buscarPorId(999L);
 
         assertTrue(resultado.isEmpty());
     }
 
     @Test
     void deveBuscarClientesPorNomeParcial() {
-        Cliente cliente1 = new Cliente("João Silva", "joao@email.com");
-        Cliente cliente2 = new Cliente("Maria Silva", "maria@email.com");
-        when(clienteRepository.findByNomeContainingIgnoreCase("silva")).thenReturn(List.of(cliente1, cliente2));
+        when(clienteRepository.findByNomeContainingIgnoreCase("sofia"))
+            .thenReturn(List.of(cliente));
         
-        List<Cliente> resultado = clienteService.buscarPorNome("silva");
+        List<Cliente> resultado = clienteService.buscarPorNome("sofia");
         
-        assertEquals(2, resultado.size());
-        assertTrue(resultado.stream().allMatch(c -> c.getNome().contains("Silva")));
+        assertEquals(1, resultado.size());
+        assertTrue(resultado.get(0).getNome().contains("Sofia"));
+    }
+
+    @Test
+    void deveRetornarListaVaziaParaNomeNaoEncontrado() {
+        when(clienteRepository.findByNomeContainingIgnoreCase(anyString()))
+            .thenReturn(Collections.emptyList());
+        
+        List<Cliente> resultado = clienteService.buscarPorNome("inexistente");
+        
+        assertTrue(resultado.isEmpty());
     }
 
     @Test
     void deveBuscarClientesPorEmailParcial() {
-        Cliente cliente = new Cliente("Teste", "teste@gmail.com");
-        when(clienteRepository.findByEmailContainingIgnoreCase("gmail")).thenReturn(List.of(cliente));
+        when(clienteRepository.findByEmailContainingIgnoreCase("email"))
+            .thenReturn(List.of(cliente));
         
-        List<Cliente> resultado = clienteService.buscarPorEmail("gmail");
+        List<Cliente> resultado = clienteService.buscarPorEmail("email");
         
         assertEquals(1, resultado.size());
-        assertTrue(resultado.get(0).getEmail().contains("gmail"));
+        assertTrue(resultado.get(0).getEmail().contains("email"));
+    }
+
+    @Test
+    void deveRetornarTodosClientes() {
+        when(clienteRepository.findAll()).thenReturn(List.of(cliente));
+        
+        List<Cliente> resultado = clienteService.buscarTodos();
+        
+        assertEquals(1, resultado.size());
+    }
+
+    @Test
+    void deveRemoverClienteExistente() {
+        when(clienteRepository.existsById(1L)).thenReturn(true);
+        
+        clienteService.removerCliente(1L);
+        
+        verify(clienteRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void deveLancarExcecaoAoRemoverClienteInexistente() {
+        when(clienteRepository.existsById(999L)).thenReturn(false);
+        
+        assertThrows(IllegalArgumentException.class, 
+            () -> clienteService.removerCliente(999L));
     }
 }

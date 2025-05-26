@@ -2,6 +2,7 @@ package br.com.leonbooks.leon_books;
 
 import br.com.leonbooks.leon_books.model.*;
 import br.com.leonbooks.leon_books.repository.EmprestimoRepository;
+import br.com.leonbooks.leon_books.repository.MultaRepository;
 import br.com.leonbooks.leon_books.service.ClienteService;
 import br.com.leonbooks.leon_books.service.EmprestimoService;
 import br.com.leonbooks.leon_books.service.LivroService;
@@ -11,12 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class EmprestimoServiceTest {
@@ -30,85 +33,211 @@ class EmprestimoServiceTest {
     @Mock
     private ClienteService clienteService;
 
+    @Mock
+    private MultaRepository multaRepository;
+
     @InjectMocks
     private EmprestimoService emprestimoService;
+
+    private Livro livro;
+    private Cliente cliente;
+    private Emprestimo emprestimo;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        
+        livro = new Livro("Dom Casmurro", "Machado de Assis");
+        livro.setId(1L);
+        livro.setDisponivel(true);
+        
+        cliente = new Cliente("João Silva", "joao@email.com");
+        cliente.setId(1L);
+        
+        emprestimo = new Emprestimo(livro, cliente);
+        emprestimo.setId(1L);
     }
 
     @Test
-void deveRealizarEmprestimoComSucesso() {
-    Long livroId = 1L;
-    Long clienteId = 1L;
-    
-    Livro livro = new Livro("Livro Teste", "Autor Teste");
-    livro.setDisponivel(true);
-    
-    Cliente cliente = new Cliente("Cliente Teste", "cliente@teste.com");
-    
-    when(livroService.buscarLivroPorId(livroId))
-        .thenReturn(Optional.of(livro));
-    
-    when(clienteService.buscarPorId(clienteId))
-        .thenReturn(Optional.of(cliente));
-    
-    when(emprestimoRepository.save(any(Emprestimo.class)))
-        .thenAnswer(invocation -> invocation.getArgument(0));
+    void deveRealizarEmprestimoComSucesso() {
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
+        when(clienteService.buscarPorId(1L)).thenReturn(Optional.of(cliente));
+        when(emprestimoRepository.save(any(Emprestimo.class))).thenReturn(emprestimo);
+        when(multaRepository.findByEmprestimoClienteIdAndPagaFalse(1L)).thenReturn(Collections.emptyList());
 
-    Emprestimo emprestimo = emprestimoService.realizarEmprestimo(livroId, clienteId);
+        Emprestimo resultado = emprestimoService.realizarEmprestimo(1L, 1L);
 
-    assertNotNull(emprestimo);
-    assertEquals(cliente, emprestimo.getCliente());
-    assertEquals(LocalDate.now().plusDays(14), emprestimo.getDataDevolucao());
-    
-    verify(livroService).cadastraLivro(argThat(l -> !l.isDisponivel()));
-}
+        assertNotNull(resultado);
+        assertFalse(livro.isDisponivel());
+        assertEquals(LocalDate.now().plusDays(14), resultado.getDataDevolucao());
+        verify(emprestimoRepository).save(any(Emprestimo.class));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoLivroNaoEncontrado() {
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, 
+            () -> emprestimoService.realizarEmprestimo(1L, 1L));
+    }
 
     @Test
     void deveLancarExcecaoQuandoLivroNaoDisponivel() {
-        Long livroId = 1L;
-        Long clienteId = 1L;
-        
-        Livro livro = new Livro("Livro Teste", "Autor Teste");
         livro.setDisponivel(false);
-        
-        when(livroService.buscarLivroPorId(livroId)).thenReturn(Optional.of(livro));
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
 
         assertThrows(IllegalStateException.class, 
-            () -> emprestimoService.realizarEmprestimo(livroId, clienteId));
+            () -> emprestimoService.realizarEmprestimo(1L, 1L));
     }
 
     @Test
-    void deveRegistrarDevolucaoCorretamente() {
-        Long emprestimoId = 1L;
-        Livro livro = new Livro("Livro Teste", "Autor Teste");
-        Emprestimo emprestimo = new Emprestimo(livro, new Cliente("Cliente", "cliente@teste.com"));
-        
-        when(emprestimoRepository.findById(emprestimoId)).thenReturn(Optional.of(emprestimo));
+    void deveLancarExcecaoQuandoClienteNaoEncontrado() {
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
+        when(clienteService.buscarPorId(1L)).thenReturn(Optional.empty());
 
-        emprestimoService.devolverLivro(emprestimoId);
+        assertThrows(IllegalArgumentException.class, 
+            () -> emprestimoService.realizarEmprestimo(1L, 1L));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoClienteTemMultasNaoPagas() {
+        Multa multa = new Multa();
+        multa.setPaga(false);
+        
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
+        when(clienteService.buscarPorId(1L)).thenReturn(Optional.of(cliente));
+        when(multaRepository.findByEmprestimoClienteIdAndPagaFalse(1L)).thenReturn(List.of(multa));
+
+        assertThrows(IllegalStateException.class, 
+            () -> emprestimoService.realizarEmprestimo(1L, 1L));
+    }
+
+    @Test
+    void deveRegistrarDevolucaoComSucesso() {
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        emprestimoService.devolverLivro(1L);
 
         assertTrue(emprestimo.isDevolvido());
         assertTrue(livro.isDisponivel());
-        verify(emprestimoRepository, times(1)).save(emprestimo);
+        verify(emprestimoRepository).save(emprestimo);
     }
 
     @Test
-    void deveRenovarEmprestimoCorretamente() {
-        Long emprestimoId = 1L;
-        Emprestimo emprestimo = new Emprestimo(
-            new Livro("Livro", "Autor"), 
-            new Cliente("Cliente", "email")
-        );
-        LocalDate dataOriginal = emprestimo.getDataDevolucao();
+    void deveAplicarMultaQuandoDevolucaoAtrasada() {
+        emprestimo.setDataDevolucao(LocalDate.now().minusDays(5));
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
         
-        when(emprestimoRepository.findById(emprestimoId)).thenReturn(Optional.of(emprestimo));
+        Multa multaSimulada = new Multa(emprestimo, BigDecimal.valueOf(10.00));
+        when(multaRepository.save(any(Multa.class))).thenReturn(multaSimulada);
+        when(multaRepository.findByEmprestimoId(1L)).thenReturn(List.of(multaSimulada));
 
-        emprestimoService.renovarEmprestimo(emprestimoId);
+        emprestimoService.devolverLivro(1L);
 
-        assertEquals(dataOriginal.plusDays(14), emprestimo.getDataDevolucao());
+        verify(multaRepository).save(any(Multa.class));
+        
+        BigDecimal multaCalculada = emprestimoService.calcularMultaEmprestimo(1L);
+        assertEquals(BigDecimal.valueOf(10.00), multaCalculada);
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoDevolverLivroJaDevolvido() {
+        emprestimo.setDevolvido(true);
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        assertThrows(IllegalStateException.class, 
+            () -> emprestimoService.devolverLivro(1L));
+    }
+
+    @Test
+    void deveRenovarEmprestimoComSucesso() {
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        emprestimoService.renovarEmprestimo(1L);
+
         assertTrue(emprestimo.isRenovado());
+        assertEquals(LocalDate.now().plusDays(28), emprestimo.getDataDevolucao());
+        verify(emprestimoRepository).save(emprestimo);
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoRenovarEmprestimoJaDevolvido() {
+        emprestimo.setDevolvido(true);
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        assertThrows(IllegalStateException.class, 
+            () -> emprestimoService.renovarEmprestimo(1L));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoRenovarEmprestimoJaRenovado() {
+        emprestimo.setRenovado(true);
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        assertThrows(IllegalStateException.class, 
+            () -> emprestimoService.renovarEmprestimo(1L));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoRenovarEmprestimoAtrasado() {
+        emprestimo.setDataDevolucao(LocalDate.now().minusDays(1));
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        assertThrows(IllegalStateException.class, 
+            () -> emprestimoService.renovarEmprestimo(1L));
+    }
+
+    @Test
+    void deveBuscarEmprestimosPorCliente() {
+        when(emprestimoRepository.findByClienteId(1L)).thenReturn(List.of(emprestimo));
+
+        List<Emprestimo> resultado = emprestimoService.buscarPorCliente(1L);
+
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+    }
+
+    @Test
+    void deveBuscarEmprestimosPorLivro() {
+        when(emprestimoRepository.findByLivroId(1L)).thenReturn(List.of(emprestimo));
+
+        List<Emprestimo> resultado = emprestimoService.buscarPorLivro(1L);
+
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+    }
+
+    @Test
+    void deveCalcularMultaParaEmprestimoAtrasado() {
+        emprestimo.setDataDevolucao(LocalDate.now().minusDays(5));
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        BigDecimal multa = emprestimoService.calcularMultaEmprestimo(1L);
+
+        assertEquals(BigDecimal.valueOf(10.00), multa);
+    }
+
+    @Test
+    void deveRetornarZeroParaEmprestimoNaoAtrasado() {
+        when(emprestimoRepository.findById(1L)).thenReturn(Optional.of(emprestimo));
+
+        BigDecimal multa = emprestimoService.calcularMultaEmprestimo(1L);
+
+        assertEquals(BigDecimal.ZERO, multa);
+    }
+
+    @Test
+    void devePagarMultaComSucesso() {
+        Multa multa = new Multa();
+        multa.setId(1L);
+        multa.setPaga(false);
+        
+        when(multaRepository.findById(1L)).thenReturn(Optional.of(multa));
+
+        emprestimoService.pagarMulta(1L);
+
+        assertTrue(multa.isPaga());
+        assertNotNull(multa.getDataPagamento());
+        verify(multaRepository).save(multa);
     }
 }

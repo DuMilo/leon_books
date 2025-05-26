@@ -9,11 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class LivroServiceTest {
@@ -24,86 +25,144 @@ class LivroServiceTest {
     @InjectMocks
     private LivroService livroService;
 
+    private Livro livro;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        livro = new Livro("Dom Casmurro", "Machado de Assis");
+        livro.setId(1L);
+        livro.setDisponivel(true);
     }
 
     @Test
     void deveCadastrarLivroComSucesso() {
-        Livro livro = new Livro("Dom Casmurro", "Machado de Assis");
-        livro.setDisponivel(true); // Garante estado inicial
-        
-        when(livroRepository.save(any(Livro.class))).thenAnswer(invocation -> {
-            Livro l = invocation.getArgument(0);
-            l.setId(1L); // Simula a geração do ID
-            return l;
-        });
+        when(livroRepository.save(any(Livro.class))).thenReturn(livro);
 
         Livro resultado = livroService.cadastraLivro(livro);
 
         assertNotNull(resultado);
         assertEquals("Dom Casmurro", resultado.getTitulo());
-        assertTrue(resultado.isDisponivel());
-        verify(livroRepository, times(1)).save(any(Livro.class));
+        verify(livroRepository).save(livro);
     }
 
     @Test
-    void deveBuscarLivroPorId() {
-        Long livroId = 1L;
-        Livro livro = new Livro("A Hora da Estrela", "Clarice Lispector");
-        when(livroRepository.findById(livroId)).thenReturn(Optional.of(livro));
+    void deveLancarExcecaoQuandoTituloVazio() {
+        livro.setTitulo("");
 
-        Optional<Livro> resultado = livroService.buscarLivroPorId(livroId);
+        assertThrows(IllegalArgumentException.class, 
+            () -> livroService.cadastraLivro(livro));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoAutorVazio() {
+        livro.setAutor("");
+
+        assertThrows(IllegalArgumentException.class, 
+            () -> livroService.cadastraLivro(livro));
+    }
+
+    @Test
+    void deveBuscarLivroPorIdExistente() {
+        when(livroRepository.findById(1L)).thenReturn(Optional.of(livro));
+
+        Optional<Livro> resultado = livroService.buscarLivroPorId(1L);
 
         assertTrue(resultado.isPresent());
-        assertEquals("Clarice Lispector", resultado.get().getAutor());
+        assertEquals("Machado de Assis", resultado.get().getAutor());
+    }
+
+    @Test
+    void deveRetornarVazioParaLivroInexistente() {
+        when(livroRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<Livro> resultado = livroService.buscarLivroPorId(999L);
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void deveListarTodosLivros() {
+        when(livroRepository.findAll()).thenReturn(List.of(livro));
+
+        List<Livro> resultado = livroService.buscarTodosLivros();
+
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
     }
 
     @Test
     void deveListarLivrosDisponiveis() {
-        Livro livro1 = new Livro("Livro 1", "Autor 1");
-        Livro livro2 = new Livro("Livro 2", "Autor 2");
-        livro2.setDisponivel(false);
+        when(livroRepository.findLivrosDisponiveis()).thenReturn(List.of(livro));
 
-        when(livroRepository.findLivrosDisponiveis()).thenReturn(List.of(livro1));
+        List<Livro> resultado = livroService.buscarLivrosDisponiveis();
 
-        List<Livro> disponiveis = livroService.buscarLivrosDisponiveis();
-
-        assertEquals(1, disponiveis.size());
-        assertEquals("Livro 1", disponiveis.get(0).getTitulo());
+        assertFalse(resultado.isEmpty());
+        assertTrue(resultado.get(0).isDisponivel());
     }
 
     @Test
-    void deveRemoverLivroExistente() {
-        Long livroId = 1L;
-        when(livroRepository.existsById(livroId)).thenReturn(true);
+    void deveRetornarListaVaziaParaLivrosDisponiveis() {
+        when(livroRepository.findLivrosDisponiveis()).thenReturn(Collections.emptyList());
 
-        livroService.removerLivro(livroId);
+        List<Livro> resultado = livroService.buscarLivrosDisponiveis();
 
-        verify(livroRepository, times(1)).deleteById(livroId);
+        assertTrue(resultado.isEmpty());
     }
 
     @Test
     void deveBuscarLivrosPorTitulo() {
-        Livro livro = new Livro("Dom Casmurro", "Machado de Assis");
         when(livroRepository.findByTituloContainingIgnoreCase("dom")).thenReturn(List.of(livro));
-        
+
         List<Livro> resultado = livroService.buscarPorTitulo("dom");
-        
-        assertEquals(1, resultado.size());
+
+        assertFalse(resultado.isEmpty());
         assertEquals("Dom Casmurro", resultado.get(0).getTitulo());
     }
 
     @Test
     void deveBuscarLivrosPorAutor() {
-        Livro livro1 = new Livro("Livro 1", "Machado de Assis");
-        Livro livro2 = new Livro("Livro 2", "Machado de Assis");
-        when(livroRepository.findByAutorContainingIgnoreCase("machado")).thenReturn(List.of(livro1, livro2));
-        
+        when(livroRepository.findByAutorContainingIgnoreCase("machado")).thenReturn(List.of(livro));
+
         List<Livro> resultado = livroService.buscarPorAutor("machado");
-        
-        assertEquals(2, resultado.size());
-        assertTrue(resultado.stream().allMatch(l -> l.getAutor().contains("Machado")));
+
+        assertFalse(resultado.isEmpty());
+        assertEquals("Machado de Assis", resultado.get(0).getAutor());
+    }
+
+    @Test
+    void deveAtualizarLivroExistente() {
+        when(livroRepository.existsById(1L)).thenReturn(true);
+        when(livroRepository.save(any(Livro.class))).thenReturn(livro);
+
+        livroService.atualizarLivro(livro);
+
+        verify(livroRepository).save(livro);
+    }
+
+    @Test
+    void deveLancarExcecaoAoAtualizarLivroInexistente() {
+        livro.setId(999L);
+        when(livroRepository.existsById(999L)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, 
+            () -> livroService.atualizarLivro(livro));
+    }
+
+    @Test
+    void deveRemoverLivroExistente() {
+        when(livroRepository.existsById(1L)).thenReturn(true);
+
+        livroService.removerLivro(1L);
+
+        verify(livroRepository).deleteById(1L);
+    }
+
+    @Test
+    void deveLancarExcecaoAoRemoverLivroInexistente() {
+        when(livroRepository.existsById(999L)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, 
+            () -> livroService.removerLivro(999L));
     }
 }
