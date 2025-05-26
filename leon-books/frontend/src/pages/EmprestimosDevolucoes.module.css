@@ -1,0 +1,42 @@
+.boxes {
+    display: flex;
+    gap: 444px;
+    padding: 0 0 19px 0;
+}
+
+.box {
+    width: 362px;
+    height: 140px;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 40px;
+    display: block;
+    padding: 26px 225px 0px 24px;
+    box-shadow: 0 10px 10px #E5E7EB ;
+
+    position: relative;
+}
+
+.title {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.number {
+    font-size: 24px;
+    padding: 25px 0 0 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--gray-800);
+    white-space: nowrap;
+}
+
+.boxicon {
+    position: absolute;
+    top: 26px;
+    right: 24px;
+    font-size: 16px;
+    color: var(--gray-900);
+}
