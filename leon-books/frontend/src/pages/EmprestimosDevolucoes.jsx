@@ -1,5 +1,5 @@
 import styles from './EmprestimosDevolucoes.module.css';
-import { SearchBox } from '../components/SearchBox';
+import { SearchBox } from '../components/SearchBox/SearchBox';
 import { Handshake } from 'phosphor-react';
 import { useState } from 'react';
 

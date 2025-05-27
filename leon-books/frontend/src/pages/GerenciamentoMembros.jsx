@@ -1,12 +1,18 @@
+import { UserPopup } from '../components/PopupsComponents/UserPopup';
+import { SearchBox } from '../components/SearchBox/SearchBox';
 import styles from './GerenciamentoMembros.module.css';
-import { SearchBox } from '../components/SearchBox';
-import { UserPopup } from '../components/UserPopup';
 
-import { useState } from 'react';
 import { UserList } from 'phosphor-react';
+import { useState } from 'react';
 
 const membrosMock = [
-  { id: 1, nome: 'Milo Moreira', email: 'milomoreira@gmail.com', emprestimos: [
+  {
+    id: 1,
+    nome: 'Milo Moreira',
+    email: 'milomoreira@gmail.com',
+    emprestimosAnteriores: 10,
+    multasPendentes: 2,
+    emprestimos: [
       {
         titulo: 'Machine Learning',
         autor: 'Matt Harrison',
@@ -17,20 +23,64 @@ const membrosMock = [
         autor: 'Dan Abramov',
         status: 'atrasado',
       },
-    ], },
-  { id: 2, nome: 'Sofia Travassos', email: 'sofiatravassos@gmail.com', emprestimos: [
-      { 
-        titulo: 'Clean Code', 
-        autor: 'Robert C. Martin', 
-        status: 'em dia' 
+    ],
+  },
+  {
+    id: 2,
+    nome: 'Sofia Travassos',
+    email: 'sofiatravassos@gmail.com',
+    emprestimosAnteriores: 4,
+    multasPendentes: 0,
+    emprestimos: [
+      {
+        titulo: 'Clean Code',
+        autor: 'Robert C. Martin',
+        status: 'em dia',
       },
-    ], },
-  { id: 3, nome: 'Marisa Cardoso', email: 'marisacardoso@gmail.com', emprestimos: ''},
-  { id: 4, nome: 'Manuela Castro', email: 'manuelacastro@gmail.com', emprestimos: ''},
-  { id: 5, nome: 'Murilo Gomes', email: 'murilogomes@gmail.com', emprestimos: ''},
-  { id: 6, nome: 'André Melo', email: 'andremelo@gmail.com', emprestimos: ''},
-  { id: 7, nome: 'Ana Rocha', email: 'anarocha@gmail.com', emprestimos: ''}
+    ],
+  },
+  {
+    id: 3,
+    nome: 'Marisa Cardoso',
+    email: 'marisacardoso@gmail.com',
+    emprestimosAnteriores: 2,
+    multasPendentes: 1,
+    emprestimos: [],
+  },
+  {
+    id: 4,
+    nome: 'Manuela Castro',
+    email: 'manuelacastro@gmail.com',
+    emprestimosAnteriores: 0,
+    multasPendentes: 0,
+    emprestimos: [],
+  },
+  {
+    id: 5,
+    nome: 'Murilo Gomes',
+    email: 'murilogomes@gmail.com',
+    emprestimosAnteriores: 3,
+    multasPendentes: 0,
+    emprestimos: [],
+  },
+  {
+    id: 6,
+    nome: 'André Melo',
+    email: 'andremelo@gmail.com',
+    emprestimosAnteriores: 1,
+    multasPendentes: 0,
+    emprestimos: [],
+  },
+  {
+    id: 7,
+    nome: 'Ana Rocha',
+    email: 'anarocha@gmail.com',
+    emprestimosAnteriores: 5,
+    multasPendentes: 2,
+    emprestimos: [],
+  }
 ];
+
 
 export function GerenciamentoMembros() {
     const [busca, setBusca] = useState('');

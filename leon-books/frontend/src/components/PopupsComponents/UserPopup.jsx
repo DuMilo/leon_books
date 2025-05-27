@@ -14,8 +14,8 @@ export function UserPopup({ membro, onClose }) {
         <div className={styles.info}>
           <p>E-mail: {membro.email}</p>
           <p>Id: {membro.id}</p>
-          <p>Empréstimos anteriores: 0</p>
-          <p>Multas pendentes: 0</p>
+          <p>Empréstimos anteriores: {membro.emprestimosAnteriores}</p>
+          <p>Multas pendentes: {membro.multasPendentes}</p>
         </div>
 
         <p className={styles.emprestimo}>Livros em Empréstimo</p>
