@@ -1,15 +1,34 @@
 import styles from './BookPopup.module.css';
 import { X } from 'phosphor-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export function BookPopup({ livro, onClose, onUpdate, onRemove }) {
+export function BookPopup({ livro, onClose, onUpdate, onRemove, onAdd }) {
+  const modoAdicionar = livro === null;
+
   const [modoEdicao, setModoEdicao] = useState({
-    titulo: false,
-    autor: false,
-    isbn: false
+    titulo: modoAdicionar,
+    autor: modoAdicionar,
+    isbn: modoAdicionar,
   });
 
-  const [dados, setDados] = useState({ ...livro });
+  const [dados, setDados] = useState(
+    livro ?? {
+      titulo: '',
+      autor: '',
+      isbn: '',
+      status: 'disponível',
+    }
+  );
+
+  useEffect(() => {
+    if (livro) {
+      setDados(livro);
+      setModoEdicao({ titulo: false, autor: false, isbn: false });
+    } else {
+      setDados({ titulo: '', autor: '', isbn: '', status: 'disponível' });
+      setModoEdicao({ titulo: true, autor: true, isbn: true });
+    }
+  }, [livro]);
 
   const toggleEdicao = (campo) => {
     setModoEdicao((prev) => ({ ...prev, [campo]: !prev[campo] }));
@@ -20,13 +39,23 @@ export function BookPopup({ livro, onClose, onUpdate, onRemove }) {
   };
 
   const handleSalvar = () => {
-    onUpdate(dados);
+    if (!dados.titulo || !dados.autor || !dados.isbn) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    if (modoAdicionar) {
+      onAdd(dados);
+    } else {
+      onUpdate(dados);
+    }
+
     onClose();
   };
 
   const handleRemover = () => {
     onRemove(dados.isbn);
-    onClose(); 
+    onClose();
   };
 
   return (
@@ -37,7 +66,9 @@ export function BookPopup({ livro, onClose, onUpdate, onRemove }) {
         </button>
 
         <div className={styles.content}>
-          <div className={styles.cover}>Livro</div>
+          <div className={styles.cover}>
+            {modoAdicionar ? 'Novo Livro' : 'Livro'}
+          </div>
 
           <div className={styles.info}>
             {['titulo', 'autor', 'isbn'].map((campo) => (
@@ -53,33 +84,41 @@ export function BookPopup({ livro, onClose, onUpdate, onRemove }) {
                     className={styles.input}
                     value={dados[campo]}
                     onChange={(e) => handleChange(e, campo)}
-                    onBlur={() => toggleEdicao(campo)}
-                    autoFocus
+                    onBlur={() => !modoAdicionar && toggleEdicao(campo)}
+                    autoFocus={modoAdicionar}
                   />
                 ) : (
-                  <button className={styles.editBtn} onClick={() => toggleEdicao(campo)}>
+                  <button
+                    className={styles.editBtn}
+                    onClick={() => toggleEdicao(campo)}
+                  >
                     Editar
                   </button>
                 )}
               </div>
             ))}
 
-            <div className={styles.field}>
-              <span className={styles.label}>Status</span>
-              <span className={styles.status}>
-                {livro.status === 'disponivel' ? 'Disponível' : 'Indisponível'}
-              </span>
-            </div>
+            {!modoAdicionar && (
+              <div className={styles.field}>
+                <span className={styles.label}>Status</span>
+                <span className={styles.status}>
+                  {livro.status === 'disponível' ? 'Disponível' : 'Indisponível'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         <div className={styles.footer}>
           <button className={styles.saveBtn} onClick={handleSalvar}>
-            Salvar Alterações
+            {modoAdicionar ? 'Adicionar Livro' : 'Salvar Alterações'}
           </button>
-          <button className={styles.removeBtn} onClick={handleRemover}>
-            Remover Livro
-          </button>
+
+          {!modoAdicionar && (
+            <button className={styles.removeBtn} onClick={handleRemover}>
+              Remover Livro
+            </button>
+          )}
         </div>
       </div>
     </div>
