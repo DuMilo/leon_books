@@ -41,7 +41,7 @@ Disponibilizamos abaixo o estado atual das issues e bugs que foram resolvidas no
 ### Diagrama de Classes
 Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
 
-![Diagrama-de-classes](https://github.com/user-attachments/assets/32ad3ece-98cd-4cd1-a8ca-95b84848a511)
+![Editor _ Mermaid Chart-2025-05-28-182747](https://github.com/user-attachments/assets/4f2743bb-1431-4a85-b574-df742b61b2e8)
 
 ### Screencast [2ª Entrega]
 Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 2ª entrega.
