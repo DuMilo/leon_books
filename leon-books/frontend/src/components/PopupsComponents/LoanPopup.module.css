@@ -1,3 +1,5 @@
+/* Existing styles .overlay to .removeBtn ... */
+
 .overlay {
   position: fixed;
   top: 0;
@@ -98,5 +100,37 @@
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+/* New styles for the fine section */
+.fineSection {
+  margin-top: 0.8rem; /* Add some space above the fine section */
+  padding-top: 0.8rem; /* Add some padding inside the section */
+  border-top: 1px solid #eee; /* Separator line */
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* Consistent gap with other .field elements */
+}
+
+.overdueMessage {
+  color: #c0392b; /* A warning red color */
+  font-weight: bold;
+  font-size: 0.9rem;
+  /* margin-bottom: 0.4rem; No need if .field already provides gap */
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Space between checkbox and text */
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none; /* Improve UX by preventing text selection on click */
+}
+
+.checkboxLabel input[type="checkbox"] {
+  /* Default browser styles are often sufficient, or add custom styling if needed */
+  /* margin-right: 5px; /* Alternative to gap if needed */
   cursor: pointer;
 }
