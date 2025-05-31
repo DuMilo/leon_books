@@ -1,66 +1,83 @@
 package br.com.leonbooks.leon_books.model;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 
 @Entity
-@Table(name = "clientes")
 public class Cliente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
     private String nome;
-
-    @Column(nullable = false, unique = true, length = 100)
     private String email;
+    private String telefone;
+    private String endereco;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Emprestimo> emprestimosAtivos = new ArrayList<>();
-
-    public Cliente() {}
-
-    public Cliente(String nome, String email){
-        this.nome = nome;
-        this.email = email;
+    public Cliente() {
     }
 
-    public Long getId(){
+    public Cliente(String nome, String email, String telefone, String endereco) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.endereco = endereco;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome){
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public List<Emprestimo> getEmprestimosAtivos(){
-        return emprestimosAtivos;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void adicionarEmprestimo(Emprestimo emprestimo) {
-        this.emprestimosAtivos.add(emprestimo);
-        emprestimo.setCliente(this);
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public boolean temAtrasos() {
-        return this.emprestimosAtivos.stream().anyMatch(e -> !e.isDevolvido() && e.getDataDevolucao().isBefore(java.time.LocalDate.now()));
+    public String getEndereco() {
+        return endereco;
     }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    // public List<Emprestimo> getEmprestimos() {
+    //     return emprestimos;
+    // }
+
+    // public void setEmprestimos(List<Emprestimo> emprestimos) {
+    //     this.emprestimos = emprestimos;
+    // }
+
+    // public void adicionarEmprestimo(Emprestimo emprestimo) {
+    //     if (this.emprestimos == null) {
+    //         this.emprestimos = new java.util.ArrayList<>();
+    //     }
+    //     this.emprestimos.add(emprestimo);
+    //     emprestimo.setCliente(this);
+    // }
 }

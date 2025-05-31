@@ -2,6 +2,8 @@ package br.com.leonbooks.leon_books.service;
 
 import br.com.leonbooks.leon_books.model.Livro;
 import br.com.leonbooks.leon_books.repository.LivroRepository;
+import br.com.leonbooks.leon_books.repository.EmprestimoRepository; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,32 +12,25 @@ import java.util.Optional;
 
 @Service
 public class LivroService {
-    private final LivroRepository livroRepository;
 
-    public LivroService(LivroRepository livroRepository){
+    private final LivroRepository livroRepository;
+    private final EmprestimoRepository emprestimoRepository;
+
+    @Autowired
+    public LivroService(LivroRepository livroRepository, EmprestimoRepository emprestimoRepository) {
         this.livroRepository = livroRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
-    @Transactional
     public Livro cadastraLivro(Livro livro) {
-        if (livro.getTitulo() == null || livro.getTitulo().isEmpty()) {
-            throw new IllegalArgumentException("Título do livro é obrigatório.");
-        }
-        if (livro.getAutor() == null || livro.getAutor().isEmpty()) {
-            throw new IllegalArgumentException("Autor do livro é obrigatório.");
-        }
         return livroRepository.save(livro);
     }
 
-    public List<Livro> buscarTodosLivros(){
+    public List<Livro> buscarTodosLivros() {
         return livroRepository.findAll();
     }
 
-    public List<Livro> buscarLivrosDisponiveis(){
-        return livroRepository.findLivrosDisponiveis();
-    }
-
-    public Optional<Livro> buscarLivroPorId(Long id){
+    public Optional<Livro> buscarLivroPorId(Long id) {
         return livroRepository.findById(id);
     }
 
@@ -47,19 +42,38 @@ public class LivroService {
         return livroRepository.findByAutorContainingIgnoreCase(autor);
     }
 
-    @Transactional
-    public void atualizarLivro(Livro livro) {
-        if (!livroRepository.existsById(livro.getId())) {
-            throw new IllegalArgumentException("Livro não encontrado.");
-        }
-        livroRepository.save(livro);
+    public List<Livro> buscarLivrosDisponiveis() {
+        return livroRepository.findByDisponivelTrue();
     }
 
     @Transactional
-    public void removerLivro(Long livroId) {
-        if (!livroRepository.existsById(livroId)) {
-            throw new IllegalArgumentException("Livro não encontrado.");
+    public Livro atualizarLivro(Long id, Livro livroDetails) { 
+        Optional<Livro> livroExistenteOptional = livroRepository.findById(id);
+        if (livroExistenteOptional.isPresent()) {
+            Livro livroExistente = livroExistenteOptional.get();
+            livroExistente.setTitulo(livroDetails.getTitulo());
+            livroExistente.setAutor(livroDetails.getAutor());
+            livroExistente.setIsbn(livroDetails.getIsbn());
+            livroExistente.setAnoPublicacao(livroDetails.getAnoPublicacao());
+            livroExistente.setDisponivel(livroDetails.isDisponivel());
+            return livroRepository.save(livroExistente);
+        } else {
+            // throw new RuntimeException("Livro com ID " + id + " não encontrado para atualização.");
+            return null;
         }
-        livroRepository.deleteById(livroId);
+    }
+
+    @Transactional
+    public boolean deletarLivro(Long id) { 
+        Optional<Livro> livroOptional = livroRepository.findById(id);
+        if (livroOptional.isPresent()) {
+            // if (emprestimoRepository.countByLivroIdAndDevolvidoFalse(id) > 0) {
+            //     throw new IllegalStateException("Não é possível deletar o livro ID " + id + " pois ele possui empréstimos ativos.");
+            // }
+            livroRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

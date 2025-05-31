@@ -4,31 +4,24 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "emprestimos")
 public class Emprestimo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "livro_id", nullable = false)
+    @ManyToOne
     private Livro livro;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @ManyToOne
     private Cliente cliente;
 
-    @Column(nullable = false)
     private LocalDate dataEmprestimo;
+    private LocalDate dataDevolucaoPrevista;
+    private LocalDate dataDevolucaoReal;
 
-    @Column(nullable = false)
-    private LocalDate dataDevolucao;
-
-    @Column(nullable = false)
-    private boolean devolvido = false;
-
-    @Column(nullable = false)
-    private boolean renovado = false;
+    private boolean devolvido;
+    private boolean renovado;
 
     public Emprestimo() {}
 
@@ -36,20 +29,15 @@ public class Emprestimo {
         this.livro = livro;
         this.cliente = cliente;
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucao = LocalDate.now().plusDays(14);
         this.devolvido = false;
         this.renovado = false;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Livro getLivro(){
+    public Livro getLivro() {
         return livro;
     }
 
@@ -57,7 +45,7 @@ public class Emprestimo {
         this.livro = livro;
     }
 
-    public Cliente getCliente(){
+    public Cliente getCliente() {
         return cliente;
     }
 
@@ -65,7 +53,7 @@ public class Emprestimo {
         this.cliente = cliente;
     }
 
-    public LocalDate getDataEmprestimo(){
+    public LocalDate getDataEmprestimo() {
         return dataEmprestimo;
     }
 
@@ -73,36 +61,57 @@ public class Emprestimo {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public LocalDate getDataDevolucao(){
-        return dataDevolucao;
+    public LocalDate getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
     }
 
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
+    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
-    public boolean isDevolvido(){
+    public LocalDate getDataDevolucaoReal() {
+        return dataDevolucaoReal;
+    }
+
+    public void setDataDevolucaoReal(LocalDate dataDevolucaoReal) {
+        this.dataDevolucaoReal = dataDevolucaoReal;
+    }
+
+    public boolean isDevolvido() {
         return devolvido;
     }
 
-    public void setDevolvido(boolean devolvido){
+    public void setDevolvido(boolean devolvido) {
         this.devolvido = devolvido;
+        if (devolvido && this.dataDevolucaoReal == null) {
+            this.dataDevolucaoReal = LocalDate.now();
+        }
     }
 
-    public boolean isRenovado(){
+    public boolean isRenovado() {
         return renovado;
-    }
-
-    public boolean estaAtrasado() {
-        return !devolvido && LocalDate.now().isAfter(dataDevolucao);
     }
 
     public void setRenovado(boolean renovado) {
         this.renovado = renovado;
     }
-    
-    public void renovarEmprestimo(){
-        this.dataDevolucao = dataDevolucao.plusDays(14);
-        this.renovado = true;
+
+    public void renovarEmprestimo() {
+        if (!renovado && !devolvido) {
+            this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(7);
+            this.renovado = true;
+        } else if (renovado) {
+            throw new IllegalStateException("Empréstimo já foi renovado.");
+        } else {
+            throw new IllegalStateException("Empréstimo já foi devolvido e não pode ser renovado.");
+        }
+    }
+
+    public boolean estaAtrasado() {
+        return !devolvido && LocalDate.now().isAfter(dataDevolucaoPrevista);
+    }
+
+    public LocalDate getDataDevolucao() {
+        return dataDevolucaoReal != null ? dataDevolucaoReal : dataDevolucaoPrevista;
     }
 }

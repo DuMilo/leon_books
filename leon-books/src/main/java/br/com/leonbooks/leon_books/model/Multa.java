@@ -35,7 +35,6 @@ public class Multa {
         this.dataAplicacao = LocalDate.now();
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

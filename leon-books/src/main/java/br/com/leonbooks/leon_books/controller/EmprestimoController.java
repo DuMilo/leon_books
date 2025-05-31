@@ -2,11 +2,10 @@ package br.com.leonbooks.leon_books.controller;
 
 import br.com.leonbooks.leon_books.model.Emprestimo;
 import br.com.leonbooks.leon_books.service.EmprestimoService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus; 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -19,39 +18,41 @@ public class EmprestimoController {
         this.emprestimoService = emprestimoService;
     }
 
-    @PostMapping("/novo-emprestimo")
-    public ResponseEntity<Emprestimo> criarEmprestimo(
-            @RequestParam Long clienteId,
-            @RequestParam Long livroId) {
-        Emprestimo emprestimo = emprestimoService.realizarEmprestimo(livroId, clienteId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(emprestimo);
+    @PostMapping
+    public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestParam Long livroId, @RequestParam Long clienteId) {
+        Emprestimo novoEmprestimo = emprestimoService.realizarEmprestimo(livroId, clienteId);
+        return new ResponseEntity<>(novoEmprestimo, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/devolver")
-    public ResponseEntity<Void> devolverLivro(@PathVariable Long id) {
-        emprestimoService.devolverLivro(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<Emprestimo>> listarTodos() {
+        List<Emprestimo> emprestimos = emprestimoService.listarTodos();
+        return ResponseEntity.ok(emprestimos);
     }
 
-    @PostMapping("/{id}/renovar")
-    public ResponseEntity<Void> renovarEmprestimo(@PathVariable Long id) {
-        emprestimoService.renovarEmprestimo(id);
-        return ResponseEntity.noContent().build();
-    }
-    
-    @GetMapping("/por-cliente/{clienteId}")
-    public List<Emprestimo> listarPorCliente(@PathVariable Long clienteId) {
-        return emprestimoService.buscarPorCliente(clienteId);
-    }
-
-    @GetMapping("/por-livro/{livroId}")
-    public List<Emprestimo> listarPorLivro(@PathVariable Long livroId) {
-        return emprestimoService.buscarPorLivro(livroId);
+    @PutMapping("/{id}/devolucao")
+    public ResponseEntity<Emprestimo> devolverLivro(@PathVariable Long id) {
+        Emprestimo emprestimoDevolvido = emprestimoService.devolverLivro(id);
+        if (emprestimoDevolvido != null) {
+            return ResponseEntity.ok(emprestimoDevolvido);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/{id}/multa")
-    public ResponseEntity<BigDecimal> verificarMulta(@PathVariable Long id) {
-        BigDecimal valorMulta = emprestimoService.calcularMultaEmprestimo(id);
-        return ResponseEntity.ok(valorMulta);
+    @GetMapping("/atrasados")
+    public ResponseEntity<List<Emprestimo>> listarAtrasados() {
+        List<Emprestimo> emprestimosAtrasados = emprestimoService.listarEmprestimosAtrasados();
+        return ResponseEntity.ok(emprestimosAtrasados);
+    }
+
+    @PutMapping("/{id}/renovar")
+    public ResponseEntity<Emprestimo> renovarEmprestimo(@PathVariable Long id) {
+        try {
+            Emprestimo emprestimoRenovado = emprestimoService.renovarEmprestimoEretornar(id);
+            return ResponseEntity.ok(emprestimoRenovado);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }
