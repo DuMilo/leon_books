@@ -30,14 +30,14 @@ class ClienteServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cliente = new Cliente("Sofia Travassos", "sofia@email.com");
+        cliente = new Cliente("Sofia Travassos", "sofia@email.com", "123456789", "Rua Teste");
         cliente.setId(1L);
     }
 
     @Test
     void deveCadastrarClienteComSucesso() {
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
         when(clienteRepository.existsByEmail(anyString())).thenReturn(false);
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
         Cliente resultado = clienteService.cadastrarCliente(cliente);
 
@@ -48,7 +48,7 @@ class ClienteServiceTest {
 
     @Test
     void deveLancarExcecaoQuandoNomeVazio() {
-        Cliente clienteInvalido = new Cliente("", "email@teste.com");
+        Cliente clienteInvalido = new Cliente("", "email@teste.com", "123", "Rua");
         
         assertThrows(IllegalArgumentException.class, 
             () -> clienteService.cadastrarCliente(clienteInvalido));
@@ -56,7 +56,7 @@ class ClienteServiceTest {
 
     @Test
     void deveLancarExcecaoQuandoEmailVazio() {
-        Cliente clienteInvalido = new Cliente("Nome", "");
+        Cliente clienteInvalido = new Cliente("Nome", "", "123", "Rua");
         
         assertThrows(IllegalArgumentException.class, 
             () -> clienteService.cadastrarCliente(clienteInvalido));

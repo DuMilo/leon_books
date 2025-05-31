@@ -3,24 +3,29 @@ package br.com.leonbooks.leon_books;
 import br.com.leonbooks.leon_books.controller.LivroController;
 import br.com.leonbooks.leon_books.model.Livro;
 import br.com.leonbooks.leon_books.service.LivroService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class LivroControllerTest {
+
+    private MockMvc mockMvc;
 
     @Mock
     private LivroService livroService;
@@ -29,120 +34,135 @@ class LivroControllerTest {
     private LivroController livroController;
 
     private Livro livro;
+    private ObjectMapper objectMapper = new ObjectMapper();
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        livro = new Livro("Dom Casmurro", "Machado de Assis");
+        mockMvc = MockMvcBuilders.standaloneSetup(livroController).build();
+        livro = new Livro("Dom Casmurro", "Machado de Assis", "978-8535902775", 1899);
         livro.setId(1L);
         livro.setDisponivel(true);
     }
 
     @Test
-    void deveCadastrarLivroComSucesso() {
-        when(livroService.cadastraLivro(any(Livro.class))).thenReturn(livro);
-
-        ResponseEntity<Livro> response = livroController.cadastrar(livro);
-        Livro responseBody = Objects.requireNonNull(response.getBody());
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Dom Casmurro", responseBody.getTitulo());
-    }
-
-    @Test
-    void deveBuscarLivroPorIdExistente() {
-        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
-
-        ResponseEntity<Livro> response = livroController.buscarPorId(1L);
-        Livro responseBody = Objects.requireNonNull(response.getBody());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1L, responseBody.getId());
-    }
-
-    @Test
-    void deveRetornarNotFoundParaLivroInexistente() {
-        when(livroService.buscarLivroPorId(anyLong())).thenReturn(Optional.empty());
-
-        ResponseEntity<Livro> response = livroController.buscarPorId(999L);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
-    void deveBuscarLivrosPorTitulo() {
-        when(livroService.buscarPorTitulo(anyString())).thenReturn(List.of(livro));
-
-        ResponseEntity<List<Livro>> response = livroController.buscarPorTitulo("casmurro");
-        List<Livro> responseBody = Objects.requireNonNull(response.getBody());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertFalse(responseBody.isEmpty());
-        assertEquals("Dom Casmurro", responseBody.get(0).getTitulo());
-    }
-
-    @Test
-    void deveRetornarListaVaziaParaTituloNaoEncontrado() {
-        when(livroService.buscarPorTitulo(anyString())).thenReturn(Collections.emptyList());
-
-        ResponseEntity<List<Livro>> response = livroController.buscarPorTitulo("inexistente");
-        List<Livro> responseBody = Objects.requireNonNull(response.getBody());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(responseBody.isEmpty());
-    }
-
-    @Test
-    void deveBuscarLivrosPorAutor() {
-        when(livroService.buscarPorAutor(anyString())).thenReturn(List.of(livro));
-
-        ResponseEntity<List<Livro>> response = livroController.buscarPorAutor("Machado");
-        List<Livro> responseBody = Objects.requireNonNull(response.getBody());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertFalse(responseBody.isEmpty());
-        assertEquals("Machado de Assis", responseBody.get(0).getAutor());
-    }
-
-    @Test
-    void deveListarTodosLivros() {
+    void deveListarTodosLivros() throws Exception {
         when(livroService.buscarTodosLivros()).thenReturn(List.of(livro));
 
-        List<Livro> response = livroController.listarTodos();
-
-        assertFalse(response.isEmpty());
-        assertEquals(1, response.size());
+        mockMvc.perform(get("/api/livros"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].titulo", is("Dom Casmurro")));
     }
 
     @Test
-    void deveListarLivrosDisponiveis() {
-        when(livroService.buscarLivrosDisponiveis()).thenReturn(List.of(livro));
+    void deveBuscarLivroPorIdExistente() throws Exception {
+        when(livroService.buscarLivroPorId(1L)).thenReturn(Optional.of(livro));
 
-        List<Livro> response = livroController.listarDisponiveis();
-
-        assertFalse(response.isEmpty());
-        assertTrue(response.get(0).isDisponivel());
+        mockMvc.perform(get("/api/livros/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)));
     }
 
     @Test
-    void deveAtualizarLivroExistente() {
+    void deveRetornarNotFoundAoBuscarLivroPorIdInexistente() throws Exception {
+        when(livroService.buscarLivroPorId(anyLong())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/livros/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveCadastrarLivroComSucesso() throws Exception {
         when(livroService.cadastraLivro(any(Livro.class))).thenReturn(livro);
 
-        ResponseEntity<Livro> response = livroController.atualizar(1L, livro);
-        Livro responseBody = Objects.requireNonNull(response.getBody());
+        mockMvc.perform(post("/api/livros")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(livro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.titulo", is("Dom Casmurro")));
+    }
+    
+    @Test
+    void deveRetornarBadRequestAoCadastrarLivroComErro() throws Exception {
+        when(livroService.cadastraLivro(any(Livro.class))).thenThrow(new RuntimeException("Erro ao cadastrar"));
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1L, responseBody.getId());
+        mockMvc.perform(post("/api/livros")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(livro)))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void deveAtualizarLivroExistente() throws Exception {
+        Livro livroAtualizado = new Livro("Dom Casmurro Atualizado", "Machado de Assis", "123", 2000);
+        livroAtualizado.setId(1L);
+        when(livroService.atualizarLivro(eq(1L), any(Livro.class))).thenReturn(livroAtualizado);
+
+        mockMvc.perform(put("/api/livros/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(livroAtualizado)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.titulo", is("Dom Casmurro Atualizado")));
+    }
+    
+    @Test
+    void deveRetornarNotFoundAoAtualizarLivroInexistente() throws Exception {
+        Livro livroAtualizado = new Livro("Dom Casmurro Atualizado", "Machado de Assis", "123", 2000);
+        when(livroService.atualizarLivro(eq(999L), any(Livro.class))).thenReturn(null);
+
+        mockMvc.perform(put("/api/livros/999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(livroAtualizado)))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void deveRetornarBadRequestAoAtualizarLivroComErro() throws Exception {
+        Livro livroAtualizado = new Livro("Dom Casmurro Atualizado", "Machado de Assis", "123", 2000);
+        when(livroService.atualizarLivro(eq(1L), any(Livro.class))).thenThrow(new RuntimeException("Erro ao atualizar"));
+
+        mockMvc.perform(put("/api/livros/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(livroAtualizado)))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void deveDeletarLivroComSucesso() throws Exception {
+        when(livroService.deletarLivro(1L)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/livros/1"))
+                .andExpect(status().isNoContent());
+        verify(livroService, times(1)).deletarLivro(1L);
     }
 
     @Test
-    void deveRemoverLivroComSucesso() {
-        doNothing().when(livroService).removerLivro(1L);
+    void deveRetornarNotFoundAoTentarDeletarLivroInexistente() throws Exception {
+        when(livroService.deletarLivro(999L)).thenReturn(false);
 
-        ResponseEntity<Void> response = livroController.remover(1L);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(livroService, times(1)).removerLivro(1L);
+        mockMvc.perform(delete("/api/livros/999"))
+                .andExpect(status().isNotFound());
+        verify(livroService, times(1)).deletarLivro(999L);
     }
+    
+    @Test
+    void deveRetornarConflictAoTentarDeletarLivroComEmprestimoAtivo() throws Exception {
+        when(livroService.deletarLivro(1L)).thenThrow(new IllegalStateException("Livro com empréstimo ativo"));
+
+        mockMvc.perform(delete("/api/livros/1"))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deveRetornarInternalServerErrorAoTentarDeletarLivroComErroInesperado() throws Exception {
+        when(livroService.deletarLivro(1L)).thenThrow(new RuntimeException("Erro inesperado"));
+
+        mockMvc.perform(delete("/api/livros/1"))
+                .andExpect(status().isInternalServerError());
+    }
+
 }

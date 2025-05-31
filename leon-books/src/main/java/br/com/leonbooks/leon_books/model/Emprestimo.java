@@ -37,6 +37,10 @@ public class Emprestimo {
         return id;
     }
 
+    public void setId(Long id) { // Método adicionado
+        this.id = id;
+    }
+
     public Livro getLivro() {
         return livro;
     }
