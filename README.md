@@ -131,3 +131,172 @@ Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Bo
   <img src="https://avatars.githubusercontent.com/u/164456593?v=4" width=100px height=100px>  
 </div>
 
+## Configuração do Ambiente do Leon Books 📚
+
+Este guia irá te ajudar a configurar e executar o backend do projeto Leon Books.
+
+---
+
+### Pré-requisitos
+
+Certifique-se de que você tem os seguintes softwares instalados em sua máquina:
+
+* **Java Development Kit (JDK)**: Versão 21 ou superior.
+* **Maven**: Para gerenciamento de dependências e build do projeto.
+* **PostgreSQL**: Banco de dados utilizado pela aplicação.
+
+---
+
+### 1. Configuração do Banco de Dados 🐘
+
+* **Crie um banco de dados** chamado `leonbooks` no seu servidor PostgreSQL.
+* **Ajuste as credenciais de acesso** (usuário e senha) no arquivo `application.properties` localizado em `leon-books/src/main/resources/application.properties`.
+    * `spring.datasource.username=SEU_USUARIO_POSTGRES`
+    * `spring.datasource.password=SUA_SENHA_POSTGRES`
+
+---
+
+### 2. Build do Projeto com Maven 🛠️
+
+1.  **Navegue até o diretório raiz do backend** do projeto, onde o arquivo `pom.xml` está localizado (geralmente `leon-books/`).
+2.  **Execute o comando Maven para limpar e instalar as dependências**:
+    ```bash
+    mvn clean install
+    ```
+    Este comando irá baixar todas as dependências necessárias e compilar o projeto.
+
+---
+
+### 3. Executando a Aplicação ▶️
+
+Após o build ser concluído com sucesso, você pode executar a aplicação Spring Boot.
+
+* **Execute o seguinte comando Maven**:
+    ```bash
+    mvn spring-boot:run
+    ```
+
+---
+
+### 4. Estrutura do Backend e Tecnologias ⚙️
+
+* **Linguagem**: Java 21.
+* **Framework**: Spring Boot.
+* **Banco de Dados**: PostgreSQL.
+* **Principais Dependências Spring Boot**:
+    * `spring-boot-starter-web`: Para APIs RESTful.
+    * `spring-boot-starter-data-jpa`: Para persistência de dados com JPA.
+    * `spring-boot-devtools`: Para facilitar o desenvolvimento com live reload e outras funcionalidades.
+* **Configuração de CORS**: A aplicação está configurada para permitir requisições do frontend rodando em `http://localhost:3001`.
+
+---
+
+Com esses passos, o ambiente de backend do Leon Books estará configurado e pronto para uso.
+
+## Configuração do Ambiente - COM INTERFACE GRÁFICA
+
+Siga as instruções abaixo para configurar e executar o projeto Leon Books em seu ambiente local.
+
+### Pré-requisitos
+
+Certifique-se de ter as seguintes ferramentas instaladas:
+
+* **Java Development Kit (JDK)**: Versão 21 ou superior.
+* **Maven**: Para gerenciamento de dependências e build do projeto backend.
+* **Node.js**: Para o ambiente de execução do frontend (inclui npm ou yarn).
+* **PostgreSQL**: Banco de dados utilizado pelo projeto.
+
+### Backend (Spring Boot)
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/leon_books.git
+    cd leon_books/leon-books
+    ```
+
+2.  **Configuração do Banco de Dados:**
+    * Crie um banco de dados no PostgreSQL chamado `leonbooks`.
+    * Ajuste as configurações de conexão com o banco de dados no arquivo `src/main/resources/application.properties`:
+        ```properties
+        spring.datasource.url=jdbc:postgresql://localhost:5432/leonbooks
+        spring.datasource.username=SEU_USUARIO_POSTGRES
+        spring.datasource.password=SUA_SENHA_POSTGRES
+        ```
+        Substitua `SEU_USUARIO_POSTGRES` e `SUA_SENHA_POSTGRES` pelas suas credenciais do PostgreSQL.
+
+3.  **Build e Execução do Backend:**
+    * Utilize o Maven para construir e executar a aplicação Spring Boot. Na raiz do diretório `leon-books` (onde o `pom.xml` está localizado):
+        ```bash
+        mvn spring-boot:run
+        ```
+    * O backend estará disponível em `http://localhost:8080`.
+
+### Frontend (React)
+
+1.  **Navegue até o diretório do frontend:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Instale as dependências:**
+    Se utilizar npm:
+    ```bash
+    npm install
+    ```
+    Se utilizar yarn:
+    ```bash
+    yarn install
+    ```
+    As dependências incluem `axios`, `phosphor-react`, `react`, `react-dom`, e `react-router-dom`. As dependências de desenvolvimento incluem linters e o Vite.
+
+3.  **Execute o frontend:**
+    Se utilizar npm:
+    ```bash
+    npm run dev
+    ```
+    Se utilizar yarn:
+    ```bash
+    yarn dev
+    ```
+    O frontend estará disponível em `http://localhost:3001` por padrão (configurado em `vite.config.js`). A aplicação React é iniciada pelo `src/main.jsx` e o componente principal é o `App.jsx`.
+
+## Estrutura do Projeto
+
+O projeto está dividido principalmente em duas partes:
+
+* `leon-books`: Contém o código backend desenvolvido em Spring Boot.
+    * `src/main/java`: Código fonte Java.
+        * `br/com/leonbooks/leon_books/controller`: Controladores REST.
+        * `br/com/leonbooks/leon_books/model`: Entidades do JPA.
+        * `br/com/leonbooks/leon_books/repository`: Repositórios Spring Data JPA.
+        * `br/com/leonbooks/leon_books/service`: Lógica de negócios.
+        * `br/com/leonbooks/leon_books/config`: Configurações da aplicação (ex: CORS).
+    * `src/main/resources`: Arquivos de configuração e SQL.
+        * `application.properties`: Configurações da aplicação Spring Boot.
+        * `db/migration`: Scripts de migração do banco de dados (embora o Flyway esteja desabilitado `spring.flyway.enabled=false`).
+    * `pom.xml`: Arquivo de configuração do Maven.
+* `leon-books/frontend`: Contém o código frontend desenvolvido em React.
+    * `src`: Código fonte do React.
+        * `components`: Componentes reutilizáveis da interface.
+        * `pages`: Componentes que representam as páginas da aplicação.
+        * `services/api.js`: Configuração do Axios para comunicação com o backend.
+        * `App.jsx`: Componente raiz da aplicação React.
+        * `main.jsx`: Ponto de entrada da aplicação React.
+        * `Router.jsx`: Define as rotas da aplicação.
+    * `package.json`: Define os scripts e dependências do frontend.
+    * `vite.config.js`: Arquivo de configuração do Vite.
+
+## Scripts
+
+### Backend (Maven)
+
+* `mvn spring-boot:run`: Executa a aplicação backend.
+* `mvn clean install`: Compila e empacota o projeto backend.
+* `mvn test`: Executa os testes unitários do backend.
+
+### Frontend (npm/yarn)
+
+* `npm run dev` ou `yarn dev`: Inicia o servidor de desenvolvimento do frontend.
+* `npm run build` ou `yarn build`: Compila o frontend para produção.
+* `npm run lint` ou `yarn lint`: Executa o linter para verificar o código do frontend.
+* `npm run preview` ou `yarn preview`: Inicia um servidor local para visualizar o build de produção.
