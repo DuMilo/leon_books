@@ -41,7 +41,7 @@ Disponibilizamos abaixo o estado atual das issues e bugs que foram resolvidas no
 ### Diagrama de Classes
 Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
 
-![Editor _ Mermaid Chart-2025-05-28-182747](https://github.com/user-attachments/assets/4f2743bb-1431-4a85-b574-df742b61b2e8)
+![Diagrama-de-classes](https://github.com/user-attachments/assets/32ad3ece-98cd-4cd1-a8ca-95b84848a511)
 
 ### Screencast [2ª Entrega]
 Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 2ª entrega.
@@ -77,6 +77,34 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 
 * <a href="https://youtu.be/xcK8Ij3ab54?si=oK0dfTfnZS_0bmLR">Screencast das Implementações [3ª Entrega]</a>
 
+
+### Testes Automatizados
+Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Books.
+
+* <a href="https://youtu.be/yxdoHR6BNmw">Testes Automatizados</a>
+
+## Entrega 4
+
+### Implementação de Histórias
+
+Foram desenvolvidas as 3 (três) histórias finais do KanBan para nossa aplicação, sendo elas 'Realizar devolução de livros', 'Aplicação de Multa', 'Realizar renovação de empréstimo'.
+
+![image](https://github.com/user-attachments/assets/238b6239-20ef-4eca-9fc3-c143b5bc5f76)
+
+### Issue/BugTracker
+Disponibilizamos abaixo o estado atual das issues e bugs do projeto.
+
+![Issues-Open](https://github.com/user-attachments/assets/89409dd4-aee8-494e-82d6-5bc9e4ada616)
+
+## Diagrama de Classes
+Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
+
+![Editor _ Mermaid Chart-2025-05-28-182747](https://github.com/user-attachments/assets/4f2743bb-1431-4a85-b574-df742b61b2e8)
+
+### Screencast [4ª Entrega]
+Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 3ª entrega.
+
+* <a href="https://youtu.be/xcK8Ij3ab54?si=oK0dfTfnZS_0bmLR">Screencast das Implementações [3ª Entrega]</a>
 
 ### Testes Automatizados
 Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Books.
