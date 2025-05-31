@@ -104,7 +104,7 @@ Disponibilizamos abaixo o diagrama de classes completo de 'Leon Books'.
 ### Screencast [4ª Entrega]
 Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com as implementações da 3ª entrega.
 
-* <a href="https://youtu.be/xcK8Ij3ab54?si=oK0dfTfnZS_0bmLR">Screencast das Implementações [3ª Entrega]</a>
+* <a href="https://youtu.be/xcK8Ij3ab54?si=oK0dfTfnZS_0bmLR">Screencast das Implementações [4ª Entrega]</a>
 
 ### Testes Automatizados
 Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Books.
