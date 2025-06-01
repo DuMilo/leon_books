@@ -109,7 +109,7 @@ Disponibilizamos abaixo o estado atual do desenvolvimento do nosso projeto com a
 ### Testes Automatizados
 Disponibilizamos abaixo o resultado positivo dos testes automatizados de Leon Books.
 
-* <a href="https://youtu.be/yxdoHR6BNmw">Testes Automatizados</a>
+* <a href="https://youtu.be/1ApOi-DGcr0?si=ShCtExmb5krM6ndR">Testes Automatizados</a>
 
 ## Projeto de Programação Orientada a Objetos - 2025.1 - CESAR School
 
